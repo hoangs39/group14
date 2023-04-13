@@ -1,18 +1,18 @@
 package com.rmit;
 
 public class Coupon {
-    private String name;
+    private String product;
     private String type;
     private double value;
 
-    public Coupon(String name, String type, double value) {
-        this.name = name;
+    public Coupon(String product, String type, double value) {
+        this.product = product;
         this.type = type;
         this.value = value;
     }
 
-    public String getName() {
-        return this.name;
+    public String getProduct() {
+        return this.product;
     }
 
     public String getType() {
@@ -32,11 +32,11 @@ public class Coupon {
       return false;
     }
     Coupon otherCoupon = (Coupon) other;
-    return this.name.equals(otherCoupon.getName());
+    return this.product.equals(otherCoupon.getProduct());
   }
 
   @Override
   public int hashCode() {
-    return this.name.length();
+    return this.product.length();
   }
 }

@@ -110,7 +110,7 @@ public class ShoppingCart {
 
     public Coupon applyCoupon(String name) {
         for (Coupon coupon : coupons) {
-            if (coupon.getName().equals(name)) {
+            if (coupon.getProduct().equals(name)) {
                 Product p = store.searchProduct(name);
                 p.setCoupon(null);
                 this.appliedCoupon = coupon;
@@ -122,7 +122,7 @@ public class ShoppingCart {
 
     private void displayAllCoupons() {
         for (Coupon coupon : coupons) {
-            System.out.println(coupon.getType() + ":" + coupon.getValue() + ":" + coupon.getName());
+            System.out.println(coupon.getType() + ":" + coupon.getValue() + ":" + coupon.getProduct());
         }
     }
 

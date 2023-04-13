@@ -76,7 +76,7 @@ public class Loader {
 
                 Coupon coupon = product.getCoupon();
                 if(coupon != null){
-                    couponInfo = String.format("%s-%s-%.5f", coupon.getType(),coupon.getName(),
+                    couponInfo = String.format("%s-%s-%.5f", coupon.getType(),coupon.getProduct(),
                     coupon.getValue());
                 }else{
                     couponInfo = String.format("%s-%s-%.5f", "x","x",
@@ -100,7 +100,7 @@ public class Loader {
             for (ShoppingCart cart : shoppingCarts) {
                 Coupon coupon = cart.appliedCoupon;
                 if(coupon != null){
-                    couponI = String.format("%s-%s-%.5f", coupon.getType(),coupon.getName(),
+                    couponI = String.format("%s-%s-%.5f", coupon.getType(),coupon.getProduct(),
                     coupon.getValue());
                 }else{
                     couponI = String.format("%s-%s-%.5f", "x","x",
