@@ -1,33 +1,45 @@
 package com.rmit;
-/**
- * @author <Dang Tran Huy Hoang - s3927241>
- */
 
- /**
- * A general Class that manage all common attributes and methods of a product.
- */
 public abstract class Product implements Gift<Product>,Tax{
+    /**
+     * Product attributes
+     */
     private String name;
     private String description;
+    private int availableQuantity;
     private double price;
-    private int quantity;
     private String message;
     private String taxType;
     private double taxAmount;
     private Coupon coupon;
 
-    final double TAXFREE = 0;
-    final double TAXNORMAL = 0.1;
-    final double TAXLUXURY = 0.2;
+    private final double TAXFREE = 0;
+    private final double TAXNORMAL = 0.1;
+    private final double TAXLUXURY = 0.2;
 
-    public Product(String name, double price,String description, int quantity,String taxType){
+    // constructors
+    /**
+     * @param name 
+     * @param description
+     * @param availableQuantity non-negative
+     * @param price non-negative 
+     * @param message nullable
+     */
+    public Product(String name, double price,String description, int availableQuantity,String taxType){
         this.name = name;
         this.price = price;
         this.description = description;
-        this.quantity = quantity;
+        this.availableQuantity = availableQuantity;
         this.taxType = taxType;
+        calculateTax(this.taxType);
     }
 
+    // override functions
+    /**
+     * @param taxType String represent the tax type of a product
+     * @return taxAmount: the calucated amount of tax of this product
+     * calculate the tax amount based on the product's tax type
+     */
     @Override
     public double calculateTax(String taxType) {
         double taxRate;
@@ -48,6 +60,7 @@ public abstract class Product implements Gift<Product>,Tax{
         return this.taxAmount;
     }
 
+    // getters and setter for message for gift 
     @Override
     public String getMessage() {
         return message;
@@ -56,7 +69,7 @@ public abstract class Product implements Gift<Product>,Tax{
     public void setMessage(String message) {
         this.message = message;
     }
-
+    // check the equality of products based on thier name and the length of thier name.
     @Override
     public boolean equals(Object other) {
       if (other == this) {
@@ -74,10 +87,46 @@ public abstract class Product implements Gift<Product>,Tax{
       return this.name.length();
     }
 
-    public abstract String view();
-    public abstract String displayAll();
+    // abstract functions
+    /**
+     * String representation
+     */
+    @Override
+    public abstract String toString();
+    /**
+     * get the product type (PHYSICAL / DIGITAL)
+     */
+    public abstract String getProductType();
+    /**
+     * get the formatted information String of a product
+     */
+    public abstract String getDisplayInfo();
 
 
+    // functions
+    /**
+     * increase product quantity by an amount 
+     * <p>
+     * Given an amount integer -> increase the product available quanity by that amount
+     * </p>
+     * @param amount amount to increase
+     */
+    public void increaseQuantity(int amount) {
+        availableQuantity += amount;
+    }
+
+    /**
+     * decrease product quantity by an amount 
+     * <p>
+     * Given an amount integer -> decrease the product available quanity by that amount
+     * </p>
+     * @param amount amount to decrease
+     */
+    public void decreaseQuantity(int amount) {
+        availableQuantity -= amount;
+    }
+
+    //getters, setters
     public String getName() {
         return name;
     }
@@ -96,28 +145,27 @@ public abstract class Product implements Gift<Product>,Tax{
     public void setPrice(double price) {
         this.price = price;
     }
-    public int getQuantity() {
-        return quantity;
+    public int getAvailableQuantity() {
+        return availableQuantity;
     }
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setAvailableQuantity(int availableQuantity) {
+        this.availableQuantity = availableQuantity;
     }
     public String getTaxType() {
         return taxType;
     }
-
     public void setTaxType(String taxType) {
         this.taxType = taxType;
     }
     public Coupon getCoupon() {
         return coupon;
     }
-
     public void setCoupon(Coupon coupon) {
         this.coupon = coupon;
     }
-
     public double getTaxAmount() {
         return taxAmount;
     }
+
+
 }

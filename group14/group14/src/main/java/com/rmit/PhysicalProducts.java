@@ -1,24 +1,35 @@
 package com.rmit;
-/**
- * @author <Dang Tran Huy Hoang - s3927241>
- */
+
 /**
  * A specific class that manage the weight attribute.
  */
 public class PhysicalProducts extends Product{
+    /**
+     * Physical product attribute
+     */
+    private double weight;
     
+    // constructors
     public PhysicalProducts(String name, double price, String description, int quantity,String taxType) {
         super(name, price, description,quantity, taxType);
     }
-
-    private double weight;
     
-    
+    // overriden functions
     @Override
-    public String view() {
-        return String.format("PHYSICAL - <%s>", this.getName());
+    public String toString() {
+        return String.format("PHYSICAL - %s", getName());
+    }
+    @Override
+    public String getProductType() {
+        return "PHYSICAL";
+    }
+    @Override
+    public String getDisplayInfo() {
+        return String.format("%s  [type= %s, description= %s, quantity= %d, price= %,.2f, weight= %,.2f, message= %s, taxType= %s, tax= %,.2f]", 
+        getName(), getProductType(), getDescription(), getAvailableQuantity(), getPrice(), getWeight(), getMessage(), getTaxType(), getTaxAmount());
     }
 
+    // getter and setter
     public double getWeight() {
         return weight;
     }
@@ -27,10 +38,6 @@ public class PhysicalProducts extends Product{
         this.weight = weight;
     }
 
-    @Override
-    public String displayAll() {
-        return String.format("%s|%.1f|%s|%d|%.5f", 
-        this.getName(),this.getPrice(),this.getDescription(),this.getQuantity(),this.getWeight());
-    }
+
     
 }

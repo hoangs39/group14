@@ -1,18 +1,21 @@
 package com.rmit;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Loader {
     static String fileName = "products.txt";
     static String fileName2 = "carts.txt";
-    public static ProductsList readProductFromFile() {
-        ProductsList productList = new ProductsList();
+    
+    public static ProductsManager readProductFromFile() {
+        ProductsManager productsManager = new ProductsManager();
         try (Scanner scanner = new Scanner(new File(fileName))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -49,17 +52,18 @@ public class Loader {
                 p.setMessage(message);
                 p.setCoupon(coupon);
                 p.calculateTax(taxType);
-                productList.getProductsList().add(p);
+
+                productsManager.addItem(p);
             }
         } catch (FileNotFoundException e) {
             System.err.println("File not found: " + fileName);
         } catch (NumberFormatException e) {
             System.err.println("Invalid number format in file: " + fileName);
         }
-        return productList;
+        return productsManager;
     }
 
-    public static void writeProductsToFile(List<Product> store) {
+    public static void writeProductsToFile(HashSet<Product> store) {
         try (FileWriter fw = new FileWriter(fileName)) {
             String weight = "";
             String msg = "";
@@ -84,7 +88,7 @@ public class Loader {
                 }
 
                 fw.write(product.getName() + "," + product.getDescription() + "," +
-                         product.getQuantity() + "," + product.getPrice() + "," 
+                         product.getAvailableQuantity() + "," + product.getPrice() + "," 
                          +weight + "," + msg + "," 
                          +couponInfo + "," + product.getTaxType() + "\n");
             }
@@ -94,19 +98,21 @@ public class Loader {
     }
 
     public static void writeCartsToFile(List<ShoppingCart> shoppingCarts) {
-        String couponI;
-        Date date = new Date();
+        String couponn;
+        LocalDateTime createId = LocalDateTime.now();
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("ddMMyyHHmmss");
+        
         try (FileWriter fw = new FileWriter(fileName2)) {
             for (ShoppingCart cart : shoppingCarts) {
-                Coupon coupon = cart.appliedCoupon;
+                Coupon coupon = cart.getAppliedCoupon();
                 if(coupon != null){
-                    couponI = String.format("%s-%s-%.5f", coupon.getType(),coupon.getProduct(),
+                    couponn = String.format("%s-%s-%.5f", coupon.getType(),coupon.getProduct(),
                     coupon.getValue());
                 }else{
-                    couponI = String.format("%s-%s-%.5f", "x","x",
+                    couponn = String.format("%s-%s-%.5f", "x","x",
                     0);    
                 }
-                fw.write(cart.id + "," + cart.totalWeight + "," + cart.totalPrice + "," + couponI +"," + date.toString() +"\n");
+                fw.write(cart.getCartId() + "," + cart.getTotalWeight() + "," + cart.getTotalPrice() + "," + couponn +"," + createId.format(myFormatObj).toString() +"\n");
             }
         } catch (IOException e) {
             e.printStackTrace();

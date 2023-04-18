@@ -1,16 +1,19 @@
 package com.rmit;
 
 public class Coupon {
+    //Coupon's attributes
     private String product;
     private String type;
     private double value;
 
+    //Constructors
     public Coupon(String product, String type, double value) {
         this.product = product;
         this.type = type;
         this.value = value;
     }
 
+    // getters setters
     public String getProduct() {
         return this.product;
     }
@@ -23,6 +26,8 @@ public class Coupon {
         return this.value;
     }
     
+  // ovverride functions
+  // check the equality of coupons based on thier product and the length of thier product.
   @Override
   public boolean equals(Object other) {
     if (other == this) {
