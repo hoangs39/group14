@@ -12,7 +12,7 @@ import java.util.Iterator;
 
 public class ShoppingCart {
     // list of product name inside the cart
-    private Map<Integer, String> itemsList;
+    private Map<Integer, Product> itemsList;
     // list of coupon inside the cart
     private Set<Coupon> coupons;
     // applied coupon
@@ -52,13 +52,15 @@ public class ShoppingCart {
 
     /**
      * search Product in the cart based on the name and id
+     * @param p name of the product
+     * @param id of the product
      * @return Product object for further convinences
      */
     public Product searchItem(String p, int id) {
-        Iterator<Map.Entry<Integer, String>> iterator = itemsList.entrySet().iterator();
+        Iterator<Map.Entry<Integer, Product>> iterator = itemsList.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry<Integer, String> entry = iterator.next();
-            if (entry.getKey() == Integer.valueOf(id) && entry.getValue().equals(p)) {
+            Map.Entry<Integer, Product> entry = iterator.next();
+            if (entry.getKey() == Integer.valueOf(id) && entry.getValue().getName().equals(p)) {
                 Product product = ProductsManager.getProductByName(p);
                 return product;
             }
@@ -67,11 +69,12 @@ public class ShoppingCart {
     }
 
     //remove all the products that have the same name in the items list and then re-calculate the price
+    // used in the case of having a removal in the product manager
     public void RemoveAllProductByName(String p) {
-        Iterator<Map.Entry<Integer, String>> iterator = itemsList.entrySet().iterator();
+        Iterator<Map.Entry<Integer, Product>> iterator = itemsList.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry<Integer, String> entry = iterator.next();
-            if (entry.getValue().equals(p)) {
+            Map.Entry<Integer, Product> entry = iterator.next();
+            if (entry.getValue().getName().equals(p)) {
                 iterator.remove();
             }
         }
@@ -91,8 +94,11 @@ public class ShoppingCart {
      */
     public boolean addItem(String p) {
         Product product = ProductsManager.getProductByName(p);
+        //create a single product that can be modified its msg indepently 
+        // to others product with the same name in the Product manager
+        Product item = createItem(product);
         if (product.getAvailableQuantity() != 0) {
-            itemsList.put(Integer.valueOf(itemId++),p);
+            itemsList.put(Integer.valueOf(itemId++),item);
             product.decreaseQuantity(1);
             cartAmount();
 
@@ -105,12 +111,70 @@ public class ShoppingCart {
         return false;
     }
 
+    /**
+     * create an unique item
+     * @param p the product name that used for create item
+     * <p>
+     * create an unique Product item in cart 
+     * that takes data from the product in the product manager, 
+     * where just only store the data of products with same name, not a single unique product
+     * </p>
+     * @return Product item that is unique
+     */
+    private Product createItem(Product p){
+        if(p instanceof PhysicalProducts){
+            PhysicalProducts phy = (PhysicalProducts) p;
+            PhysicalProducts item = new PhysicalProducts(p.getName(),p.getPrice(),p.getDescription(),1,p.getTaxType());
+            item.setWeight(phy.getWeight());
+            return item;
+        }else{
+            DigitalProduct digitalProduct = new DigitalProduct(p.getName(),p.getPrice(),p.getDescription(),1,p.getTaxType());
+            return digitalProduct;
+        }
+    }
+
     // calculate the size of the map
     public int countItem() {
         return itemsList.size();
     }
 
     /**
+     * remove item to item list based on id
+     * @param p    the product name used for removing
+     * @param id   the id of a specific item
+     * <p>
+     * remove product from items map based on its name and id
+     * then add the quatity of the product
+     * and remove coupon to copouns list 
+     * if there are no left coressponding product in the list
+     * </p>
+     * @return boolean true if success / false if not work
+     */
+    public boolean removeItemById(String p, int id) {
+        Iterator<Map.Entry<Integer, Product>> iterator = itemsList.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, Product> entry = iterator.next();
+            if (entry.getValue().getName().equals(p) && entry.getKey() == id) {
+                iterator.remove();
+                Product product = ProductsManager.getProductByName(p);
+                if(product != null){
+                    product.increaseQuantity(1);
+                }
+
+                if (!getItemsList().containsValue(p)){
+                    if(getAppliedCoupon().equals(p)){
+                        setAppliedCoupon(null);
+                    }
+                    removeCoupon(p);
+                }
+                cartAmount();
+                return true;
+            }
+        }
+        return false;
+    }
+
+     /**
      * remove item to item list 
      * @param p    the product name used for removing
      * <p>
@@ -122,10 +186,10 @@ public class ShoppingCart {
      * @return boolean true if success / false if not work
      */
     public boolean removeItem(String p) {
-        Iterator<Map.Entry<Integer, String>> iterator = itemsList.entrySet().iterator();
+        Iterator<Map.Entry<Integer, Product>> iterator = itemsList.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry<Integer, String> entry = iterator.next();
-            if (entry.getValue().equals(p)) {
+            Map.Entry<Integer, Product> entry = iterator.next();
+            if (entry.getValue().getName().equals(p)) {
                 iterator.remove();
                 Product product = ProductsManager.getProductByName(p);
                 if(product != null){
@@ -166,10 +230,11 @@ public class ShoppingCart {
      * Search For item in the item list and then get/set message for the Product
      * item
      * @param p    the product name used for searching
+     * @param id id of product
      * @return String if found / null if not found
      */
-    public String getMessage(String p) {
-        Product product = ProductsManager.getProductByName(p);
+    public String getMessage(String p, int id) {
+        Product product = searchItem(p, id);
         if (product != null && product.getMessage()!= null) {
             return product.getMessage();
         }
@@ -192,11 +257,11 @@ public class ShoppingCart {
      */
     public double cartAmount() {
         resetAll();
-        Iterator<Map.Entry<Integer, String>> iterator = itemsList.entrySet().iterator();
+        Iterator<Map.Entry<Integer, Product>> iterator = itemsList.entrySet().iterator();
         double productPrice;
         while (iterator.hasNext()) {
-            Map.Entry<Integer, String> entry = iterator.next();
-            Product product = ProductsManager.getProductByName(entry.getValue());
+            Map.Entry<Integer, Product> entry = iterator.next();
+            Product product = entry.getValue();
             productPrice = product.getPrice() + product.getTaxAmount();
             // calculate the weight
             if (product instanceof PhysicalProducts) {
@@ -204,7 +269,7 @@ public class ShoppingCart {
                 totalWeight += phy.getWeight();
             }
             // if there any apply coupon
-            if(this.appliedCoupon != null){
+            if(this.appliedCoupon != null && this.appliedCoupon.getProduct().equals(product.getName())){
                 if (this.appliedCoupon.getType().equals("percent")) {
                     productPrice *= (1 - (appliedCoupon.getValue()/100));
                 } else if (this.appliedCoupon.getType().equals("price")) {
@@ -227,16 +292,17 @@ public class ShoppingCart {
 
     /**
      * assign the Coupon based on the name
+     * @param p Product that might be inside the cart
      * <p>
      * if there is any the coupon that has the product name in the coupons list
      * then assign it to appiled coupon and re-calculate the price
      * </p>
      * @return applied copoun
      */
-    public Coupon applyCoupon(String p) {
+    public Coupon applyCoupon(Product p) {
         if (getItemsList().containsValue(p)){
             if(getAppliedCoupon().equals(p)){
-                this.appliedCoupon = searchCoupon(p);
+                this.appliedCoupon = searchCoupon(p.getName());
             }
         }
         cartAmount();
@@ -245,11 +311,12 @@ public class ShoppingCart {
 
     /**
      * search copoun based on the name
+     * @param p name of the product that owns the coupon
      * @return searched copoun
      */
     public Coupon searchCoupon(String p) {
         for (Coupon coupon : coupons) {
-            if (coupon.getProduct().equals(p) && getItemsList().containsValue(p)) {
+            if (coupon.getProduct().equals(p)) {
                 return coupon;
             }
         }
@@ -282,11 +349,11 @@ public class ShoppingCart {
 
 
     // getters, setters
-    public Map<Integer, String> getItemsList() {
+    public Map<Integer, Product> getItemsList() {
         return itemsList;
     }
 
-    public void setItemsList(Map<Integer, String> itemsList) {
+    public void setItemsList(Map<Integer, Product> itemsList) {
         this.itemsList = itemsList;
     }
 
