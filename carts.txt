@@ -1,0 +1,9 @@
+CartId,TotalWeight,TotalPrice,Coupon,Date
+C2,0.0,4.4,x-x-0.00000,240423043331
+Products:1
+Type,Name,Description,Quantity,Price,Weight,Gift,Coupon,TaxType
+PHYSICAL,bike,new,1,4.0,0.00000,notSupport!,x-x-0.00000,normalTax
+C1,30.0,147.0,x-x-0.00000,240423043331
+Products:1
+Type,Name,Description,Quantity,Price,Weight,Gift,Coupon,TaxType
+PHYSICAL,car,new,3,40.0,10.00000,notSupport!,x-x-0.00000,luxuryTax

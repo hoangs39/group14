@@ -10,7 +10,7 @@ public class ProductsManager {
      * product manager attributes
      */
     // list of products
-    private static HashSet<Product> productList;
+    private HashSet<Product> productList;
 
     // constructor
     public ProductsManager() {
@@ -18,20 +18,26 @@ public class ProductsManager {
     }
 
     // getter
-    public static HashSet<Product> getProductList() {
+    public HashSet<Product> getProductList() {
         return productList;
     }
 
     // product list functions
-    public void addItem(Product p) {
-        this.productList.add(p);
+    public boolean addProduct(Product p) {
+        if(!productList.contains(p)){
+            this.productList.add(p);
+            return true;
+        }
+        return false;
     }
 
-    public int countItem() {
+    //calculate the size od the set
+    public int countProducts() {
         return this.productList.size();
     }
 
-    public boolean removeItem(Product p) {
+    // remove the prodcuct in the set based on product's name
+    public boolean removeProduct(Product p) {
         if (this.productList.contains(p)) {
             this.productList.remove(p);
             return true;
@@ -46,7 +52,7 @@ public class ProductsManager {
      * else print all product
      * </p>
      */
-    public static void getAllProducts() {
+    public void getAllProducts() {
         if (productList.isEmpty()) {
             System.out.println("There are no products in the store!");
         } else {
@@ -66,7 +72,7 @@ public class ProductsManager {
      * @param searchName the search product name
      * @return product if found / null if not found
      */
-    public static Product getProductByName(String searchName) {
+    public Product getProductByName(String searchName) {
         if (productList != null) {
             for (Product product : productList) {
                 if (searchName.equals(product.getName())) return product;

@@ -8,10 +8,13 @@ public abstract class Product implements Gift<Product>,Tax{
     private String description;
     private int availableQuantity;
     private double price;
-    private String message;
+    private String message = "noMsg";
     private String taxType;
     private double taxAmount;
     private Coupon coupon;
+    //decide to create a gift
+    private boolean createGift = false;
+
 
     private final double TAXFREE = 0;
     private final double TAXNORMAL = 0.1;
@@ -23,7 +26,6 @@ public abstract class Product implements Gift<Product>,Tax{
      * @param description
      * @param availableQuantity non-negative
      * @param price non-negative 
-     * @param message nullable
      */
     public Product(String name, double price,String description, int availableQuantity,String taxType){
         this.name = name;
@@ -44,13 +46,13 @@ public abstract class Product implements Gift<Product>,Tax{
     public double calculateTax(String taxType) {
         double taxRate;
         switch (this.taxType) {
-            case "tax-free":
+            case "taxFree":
                 taxRate = TAXFREE;
                 break;
-            case "normal tax":
+            case "normalTax":
                 taxRate = TAXNORMAL;
                 break;
-            case "luxury tax":
+            case "luxuryTax":
                 taxRate = TAXLUXURY;
                 break;
             default:
@@ -63,11 +65,21 @@ public abstract class Product implements Gift<Product>,Tax{
     // getters and setter for message for gift 
     @Override
     public String getMessage() {
-        return message;
+        if(createGift){
+            return this.message;
+        }else{
+            return "notSupport!";
+        }
+    
     }
+
     @Override
     public void setMessage(String message) {
-        this.message = message;
+        if(createGift){
+            this.message = message;
+        }else{
+            this.message = "noSupport";
+        }
     }
     // check the equality of products based on thier name and the length of thier name.
     @Override
@@ -79,7 +91,7 @@ public abstract class Product implements Gift<Product>,Tax{
         return false;
       }
       Product otherProduct = (Product) other;
-      return this.name.equals(otherProduct.getName()) && this.getMessage().equals(otherProduct.getMessage()) ;
+      return this.name.equals(otherProduct.getName()) ;
     }
   
     @Override
@@ -165,6 +177,13 @@ public abstract class Product implements Gift<Product>,Tax{
     }
     public double getTaxAmount() {
         return taxAmount;
+    }
+    public boolean getCreateGift() {
+        return createGift;
+    }
+
+    public void setCreateGift(boolean createGift) {
+        this.createGift = createGift;
     }
 
 

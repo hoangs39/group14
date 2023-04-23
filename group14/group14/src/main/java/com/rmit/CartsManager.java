@@ -37,7 +37,7 @@ public class CartsManager {
      * @param searchCartId the search cart id
      * @return shopping cart if found / null if not found
      */
-    public ShoppingCart getById(String id){
+    public ShoppingCart getCartById(String id){
         if (shoppingCarts != null) {
             for (ShoppingCart shoppingCart : shoppingCarts) {
                 if (id.equals(shoppingCart.getCartId())) return shoppingCart;
@@ -80,9 +80,11 @@ public class CartsManager {
     public String buy(){
         double payment = 0.0;
         for (ShoppingCart shoppingCart : shoppingCarts) {
+            System.out.println(shoppingCart.toString());
+            System.out.println(shoppingCart.printItemsList());
             payment += shoppingCart.getTotalPrice();
         }
-        String noti = String.format("You Have Just Done Your Shopping! and This is Your Bill: %.5f",  payment);
+        String noti = String.format("You have Done Your Shopping and this is you bill: %.2f", payment);
         Loader.writeCartsToFile(shoppingCarts);
         shoppingCarts.removeAll(shoppingCarts);
         return noti;
@@ -99,17 +101,17 @@ public class CartsManager {
     }
 
     // change all carts's total price whenever there is a change inside the products list
-    public boolean Change() {
+    public boolean change(Product p) {
         for (ShoppingCart shoppingCart : shoppingCarts) {
-            shoppingCart.cartAmount();
+            shoppingCart.changeItemAll(p);
         }
         return true;
     }
 
     // remove a cart's product whenever there is a removal inside the products list
-    public boolean RemoveItem(String p) {
+    public boolean removeItemInCart(Product p) {
         for (ShoppingCart shoppingCart : shoppingCarts) {
-            shoppingCart.RemoveAllProductByName(p);
+            shoppingCart.removeItem(p.getName());
         }
         return true;
     }
