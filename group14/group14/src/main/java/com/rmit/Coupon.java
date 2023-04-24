@@ -37,7 +37,7 @@ public class Coupon {
       return false;
     }
     Coupon otherCoupon = (Coupon) other;
-    return this.product.equals(otherCoupon.getProduct());
+    return this.product.equals(otherCoupon.getProduct()) && this.getType().equals(otherCoupon.getType()) && this.getValue() == otherCoupon.getValue();
   }
 
   @Override

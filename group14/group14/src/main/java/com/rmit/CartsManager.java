@@ -23,8 +23,11 @@ public class CartsManager {
      * </p>
      */
     public boolean addCart(ShoppingCart cart){
-        shoppingCarts.add(cart);
-        return true;
+        if(!shoppingCarts.contains(cart)){
+            shoppingCarts.add(cart);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -116,6 +119,10 @@ public class CartsManager {
         return true;
     }
     
+    public List<ShoppingCart> getShoppingCarts() {
+        return shoppingCarts;
+    }
+
     public int countCarts() {
         return this.shoppingCarts.size();
     }

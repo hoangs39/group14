@@ -28,7 +28,7 @@ public class Test2 {
         // Loader.writeProductsToFile(productManager.getProductList());
         // ProductsManager store = Loader.readProductFromFile();
         // store.getAllProducts();
-        // Loader.writeProductsToFile(productManager.getProductList());
+        // Loader.writeProductsToFile(store.getProductList());
         // System.out.println(productManager.addProduct(p4));
         // System.out.println(productManager.countProducts() == 3);
 
@@ -91,11 +91,12 @@ public class Test2 {
         // System.out.println(c1.searchItem(p2.getName()).getPrice());
         // cm.RemoveItemInCart(p1);
         // System.out.println(c1.searchItem(p1.getName()));
-        // System.out.println(cm.buy());
+        
         // System.out.println(cm.countCarts());
 
         // CartsManager cartsManager = Loader.createCartsObject(store);
         // cartsManager.displayCarts();
+        // System.out.println(cartsManager.buy());
         // cm.displayCarts();
         // Loader.writeProductsToFile();
     }

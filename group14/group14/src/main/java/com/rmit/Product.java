@@ -46,7 +46,7 @@ public abstract class Product implements Gift<Product>,Tax{
     public double calculateTax(String taxType) {
         double taxRate;
         switch (this.taxType) {
-            case "taxFree":
+            case "freeTax":
                 taxRate = TAXFREE;
                 break;
             case "normalTax":

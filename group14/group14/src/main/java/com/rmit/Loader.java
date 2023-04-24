@@ -21,9 +21,11 @@ public class Loader {
             // read the first title Line;
             in.readLine();
             String line;
-            while ((line = in.readLine()) != null) {
+            while (!(line = in.readLine()).equals("") ) {
                 String[] elements = line.split(",");
                 String type = elements[0];
+                System.out.println(elements[0]);
+                System.out.println(line);
                 String name = elements[1];
                 String description = elements[2];
                 int quantity = Integer.parseInt(elements[3]);
@@ -36,6 +38,10 @@ public class Loader {
                     weight = 0.0;
                 }
                 String message = elements[6];
+                boolean gift = false;
+                if(message.equals("true")){
+                    gift = true;
+                }
                 Coupon coupon = null;
                 if (!elements[7].equals("x-x-0.00000")) {
                     String[] couponInfos = elements[7].split("-");
@@ -55,6 +61,7 @@ public class Loader {
                 }
                 p.setMessage(message);
                 p.setCoupon(coupon);
+                p.setCreateGift(gift);
                 productsManager.addProduct(p);
                 // String lineSkip = in.readLine();
             }
@@ -88,10 +95,14 @@ public class Loader {
                     couponInfo = String.format("%s-%s-%.5f", "x", "x",
                             0.0);
                 }
+                String msg = "false";
+                if(product.getCreateGift()){
+                    msg = "true";
+                }
 
                 fw.write(product.getProductType() + "," + product.getName() + "," + product.getDescription() + "," +
                         product.getAvailableQuantity() + "," + product.getPrice() + ","
-                        + weight + "," + product.getMessage() + ","
+                        + weight + "," + msg + ","
                         + couponInfo + "," + product.getTaxType() + "\n");
             }
         } catch (IOException e) {
