@@ -60,6 +60,7 @@ public class Main {
                     break;
                 case 6:
                     active = false;
+                    Loader.writeProductsToFile(store.getProductList());
                     sc.close();
                     break;
 
