@@ -21,11 +21,9 @@ public class Loader {
             // read the first title Line;
             in.readLine();
             String line;
-            while (!(line = in.readLine()).equals("") ) {
+            while ((line = in.readLine()) != null) {
                 String[] elements = line.split(",");
                 String type = elements[0];
-                System.out.println(elements[0]);
-                System.out.println(line);
                 String name = elements[1];
                 String description = elements[2];
                 int quantity = Integer.parseInt(elements[3]);
