@@ -173,7 +173,7 @@ public class Main {
         } while (quantity < 0);
         System.out.println("Please enter the description you want for the item:");
         String description = sc.nextLine();
-        System.out.println("Please enter the taxType (freeTax:0% or NormalTax:10% or luxuryTax:20%):");
+        System.out.println("Please enter the taxType (freeTax:0% or normalTax:10% or luxuryTax:20%):");
         String taxType = sc.nextLine();
         p.setDescription(description);
         p.setPrice(price);
