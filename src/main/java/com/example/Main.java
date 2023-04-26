@@ -22,7 +22,7 @@ public class Main {
         System.out.println("1.Handling Products:");
         System.out.println("2.Handle Shopping Cart:");
         System.out.println("3.Handle Gift-Items:");
-        System.out.println("4.Handle Copouns:");
+        System.out.println("4.Handle Coupons:");
         System.out.println("5.Handle the Cart's List:");
         ;
         System.out.println("6.Exit!");
