@@ -344,23 +344,34 @@ public class Main {
                     if (shoppingCart.getAppliedCoupon() != null) {
                         System.out.println("This Cart had an applied coupon already!");
                     } else {
+                        System.out.print("Products in the cart: ");
                         System.out.println(shoppingCart.printItemsList());
-                        System.out.print("Existing coupons in the cart: ");
-                        shoppingCart.displayAllCoupons();
-                        System.out.println();
-                        applyCouponsToCart(shoppingCart, sc);
-                        System.out.println("Successfully!");
+                        System.out.print("Available coupons in the cart: ");
+                        if(shoppingCart.getCoupons().size() != 0){
+                            shoppingCart.displayAllCoupons();
+                            System.out.println();
+                            applyCouponsToCart(shoppingCart, sc);
+                            
+                        }else{
+                            System.out.println("Coupon list is empty!");
+                        }
                     }
                     break;
                 case 2:
-                    shoppingCart.displayAllCoupons();
-                    System.out.println();
-                    if(removeCouponsFromCart(shoppingCart, sc)){
-                        System.out.println("Successfully!");
+                    if(shoppingCart.getCoupons().size() != 0){
+                        System.out.print("Available coupons in the cart: ");
+                        shoppingCart.displayAllCoupons();
+                        System.out.println();
+                        if(removeCouponsFromCart(shoppingCart, sc)){
+                            System.out.println("Remove Successfully!");
+                        }else{
+                            System.out.println("Remove Unsuccessfully!");
+                        }
+                        break;
                     }else{
-                        System.out.println("Successfully!");
+                        System.out.println("Coupons list is empty!");
                     }
-                    break;
+
                 case 3:
                     active = false;
                     break;
@@ -371,9 +382,15 @@ public class Main {
     }
 
     public static Coupon applyCouponsToCart(ShoppingCart shoppingCart, Scanner sc) {
-        System.out.println("Enter the product:");
+        System.out.println("Enter the coupon's product:");
         String name = sc.nextLine();
-        return shoppingCart.applyCoupon(name);
+        if(shoppingCart.searchCoupon(name) == null){
+            System.out.println("No Available coupon in the cart!");
+            return null;
+        }else{
+            System.out.println("Successfully!");
+            return shoppingCart.applyCoupon(name);
+        }
     }
 
     public static boolean removeCouponsFromCart(ShoppingCart shoppingCart, Scanner sc) {
