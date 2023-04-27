@@ -319,7 +319,7 @@ public class Main {
 
     public static void menuCoupons() {
         System.out.println("\n******************************************");
-        System.out.println("1.Apply Copouns to Cart");
+        System.out.println("1.Apply Coupons to Cart");
         System.out.println("2.Remove Copoun in Cart");
         System.out.println("3.Exit!");
     }
@@ -347,7 +347,7 @@ public class Main {
                         System.out.println(shoppingCart.printItemsList());
                         shoppingCart.displayAllCoupons();
                         System.out.println();
-                        applyCopounsToCart(shoppingCart, sc);
+                        applyCouponsToCart(shoppingCart, sc);
                         System.out.println("Sucessfully!");
                     }
                     break;
@@ -369,7 +369,7 @@ public class Main {
         }
     }
 
-    public static Coupon applyCopounsToCart(ShoppingCart shoppingCart, Scanner sc) {
+    public static Coupon applyCouponsToCart(ShoppingCart shoppingCart, Scanner sc) {
         System.out.println("Enter the product:");
         String name = sc.nextLine();
         return shoppingCart.applyCoupon(name);

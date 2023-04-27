@@ -74,7 +74,7 @@ public class ShoppingCart {
      * @param p the product used for adding
      *          <p>
      *          add product to items map
-     *          then add coupon to copouns list if product has a copoun
+     *          then add coupon to coupons list if product has a copoun
      *          and substract the quantity of product
      *          </p>
      * @return boolean true if success / false if not work
@@ -146,7 +146,7 @@ public class ShoppingCart {
      *          <p>
      *          remove product from items set
      *          then add the quatity of the product
-     *          and remove coupon to copouns list
+     *          and remove coupon to coupons list
      *          if there are no left coressponding product in the list
      *          </p>
      * @return boolean true if success / false if not work
