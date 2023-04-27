@@ -46,7 +46,7 @@ public class ShoppingCartTest {
         ShoppingCart c1 = new ShoppingCart("C1",productManager);
         c1.addItem(p1);
         c1.addItem(p1);
-        assertTrue(c1.searchItem(p1.getName()).getMessage().equals("noMsg"));
+        assertTrue(c1.searchItem(p1.getName()).getMessage().equals("Empty!"));
     }
 
     @Test
@@ -187,7 +187,7 @@ public class ShoppingCartTest {
         ShoppingCart c1 = new ShoppingCart("C1",productManager);
         c1.addItem(p1);
         c1.addItem(p1);
-        assertTrue(c1.printItemsList().equals("car-40.00000-2-8.00000,"));
+        assertTrue(c1.printItemsList().equals("Name:car Price:40.00000 QuantityInCart:2 Tax:8.00000||"));
     }
 
     @Test

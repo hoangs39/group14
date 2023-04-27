@@ -10,8 +10,8 @@ public class Main {
         public void close() throws IOException {
         }
     });
-    static ProductsManager store = Loader.readProductFromFile();
-    static CartsManager cartsManager = Loader.createCartsObject(store);
+    static ProductsManager store = Controller.readProductFromFile();
+    static CartsManager cartsManager = Controller.createCartsObject(store);
 
     public static void main(String[] args) {
         start();
@@ -61,7 +61,7 @@ public class Main {
                     break;
                 case 6:
                     active = false;
-                    Loader.writeProductsToFile(store.getProductList());
+                    Controller.writeProductsToFile(store.getProductList());
                     sc.close();
                     break;
 
@@ -201,18 +201,17 @@ public class Main {
         boolean active = true;
         while (active) {
             menuCart();
-            cartsManager.displayCarts();
-            System.out.println();
-            System.out.println("Please enter the cartId:");
-            String cartId = sc.nextLine();
-            ShoppingCart shoppingCart = cartsManager.getCartById(cartId);
             System.out.println();
             int choice;
             do {
                 System.out.println("Please enter the number 1-4 to execute the program:");
                 choice = Integer.parseInt(sc.nextLine());
             } while (choice < 1 && choice > 4);
-
+            cartsManager.displayCarts();
+            System.out.println();
+            System.out.println("Please enter the cartId:");
+            String cartId = sc.nextLine();
+            ShoppingCart shoppingCart = cartsManager.getCartById(cartId);
             switch (choice) {
                 // view products
                 case 1:
@@ -269,18 +268,16 @@ public class Main {
         boolean active = true;
         while (active) {
             menuGift();
-            cartsManager.displayCarts();
-            System.out.println();
-            System.out.println("Please enter the cartId:");
-            String cartId = sc.nextLine();
-            ShoppingCart shoppingCart = cartsManager.getCartById(cartId);
             System.out.println();
             int choice;
             do {
                 System.out.println("Please enter the number 1-3 to execute the program:");
                 choice = Integer.parseInt(sc.nextLine());
             } while (choice < 1 && choice > 3);
-
+            cartsManager.displayCarts();
+            System.out.println("Please enter the cartId:");
+            String cartId = sc.nextLine();
+            ShoppingCart shoppingCart = cartsManager.getCartById(cartId);
             switch (choice) {
                 // view products
                 case 1:
@@ -331,30 +328,37 @@ public class Main {
         boolean active = true;
         while (active) {
             menuCoupons();
+            System.out.println();
             cartsManager.displayCarts();
-            System.out.println();
-            System.out.println("Please enter the cartId:");
-            String cartId = sc.nextLine();
-            ShoppingCart shoppingCart = cartsManager.getCartById(cartId);
-            System.out.println();
             int choice;
             do {
                 System.out.println("Please enter the number 1-3 to execute the program:");
                 choice = Integer.parseInt(sc.nextLine());
             } while (choice < 1 && choice > 3);
-
+            System.out.println("Please enter the cartId:");
+            String cartId = sc.nextLine();
+            ShoppingCart shoppingCart = cartsManager.getCartById(cartId);
             switch (choice) {
                 // view products
                 case 1:
-                    System.out.println(shoppingCart.printItemsList());
-                    shoppingCart.displayAllCoupons();
-                    System.out.println();
-                    applyCopounsToCart(shoppingCart, sc);
+                    if (shoppingCart.getAppliedCoupon() != null) {
+                        System.out.println("This Cart had an applied copoun already!");
+                    } else {
+                        System.out.println(shoppingCart.printItemsList());
+                        shoppingCart.displayAllCoupons();
+                        System.out.println();
+                        applyCopounsToCart(shoppingCart, sc);
+                        System.out.println("Sucessfully!");
+                    }
                     break;
                 case 2:
                     shoppingCart.displayAllCoupons();
                     System.out.println();
-                    removeCouponsFromCart(shoppingCart, sc);
+                    if(removeCouponsFromCart(shoppingCart, sc)){
+                        System.out.println("Sucessfully!");
+                    }else{
+                        System.out.println("Sucessfully!");
+                    }
                     break;
                 case 3:
                     active = false;

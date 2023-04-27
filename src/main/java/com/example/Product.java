@@ -8,7 +8,7 @@ public abstract class Product implements Gift<Product>,Tax{
     private String description;
     private int availableQuantity;
     private double price;
-    private String message = "noMsg";
+    private String message = "Empty!";
     private String taxType;
     private double taxAmount;
     private Coupon coupon;
@@ -77,8 +77,6 @@ public abstract class Product implements Gift<Product>,Tax{
     public void setMessage(String message) {
         if(createGift){
             this.message = message;
-        }else{
-            this.message = "noSupport";
         }
     }
     // check the equality of products based on thier name and the length of thier name.

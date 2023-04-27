@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Loader {
+public class Controller {
     static String fileName = "products.txt";
     static String fileName2 = "carts.txt";
 

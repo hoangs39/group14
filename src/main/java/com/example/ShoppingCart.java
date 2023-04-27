@@ -46,10 +46,10 @@ public class ShoppingCart {
         String productsInfo = "";
         StringBuilder sb = new StringBuilder();
         for (Product product : itemsList) {
-            String productInfo = String.format("%s-%.5f-%d-%.5f", product.getName(), product.getPrice(),
+            String productInfo = String.format("Name:%s Price:%.5f QuantityInCart:%d Tax:%.5f", product.getName(), product.getPrice(),
                     product.getAvailableQuantity(),
                     product.getTaxAmount());
-            productsInfo = sb.append(productInfo).append(",").toString();
+            productsInfo = sb.append(productInfo).append("||").toString();
         }
         return productsInfo;
     }
@@ -331,7 +331,7 @@ public class ShoppingCart {
 
     public void displayAllCoupons() {
         for (Coupon coupon : coupons) {
-            System.out.println(coupon.getType() + ":" + coupon.getValue() + ":" +
+            System.out.println("Type:" +coupon.getType() + "|" + "Value:"+coupon.getValue() + "|" + "Product:" +
                     coupon.getProduct());
         }
     }
