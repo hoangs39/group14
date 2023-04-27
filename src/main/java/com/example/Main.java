@@ -371,7 +371,7 @@ public class Main {
                     }else{
                         System.out.println("Coupons list is empty!");
                     }
-
+                    break;
                 case 3:
                     active = false;
                     break;
