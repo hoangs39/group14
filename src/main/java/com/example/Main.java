@@ -53,7 +53,7 @@ public class Main {
                     break;
                 // Doing Shopping
                 case 4:
-                    handleCopouns(sc);
+                    handleCoupons(sc);
                     break;
                 // Display Products in WareHouse
                 case 5:
@@ -324,7 +324,7 @@ public class Main {
         System.out.println("3.Exit!");
     }
 
-    public static void handleCopouns(Scanner sc) {
+    public static void handleCoupons(Scanner sc) {
         boolean active = true;
         while (active) {
             menuCoupons();
