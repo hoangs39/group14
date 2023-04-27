@@ -345,7 +345,7 @@ public class Main {
                         System.out.println("This Cart had an applied coupon already!");
                     } else {
                         System.out.println(shoppingCart.printItemsList());
-                        System.out.print("Existing coupon in the cart: ");
+                        System.out.print("Existing coupons in the cart: ");
                         shoppingCart.displayAllCoupons();
                         System.out.println();
                         applyCouponsToCart(shoppingCart, sc);
@@ -387,7 +387,7 @@ public class Main {
         System.out.println("\n******************************************");
         System.out.println("1.View Cart Detail:");
         System.out.println("2.Sort Carts");
-        System.out.println("3.Print The Recepit");
+        System.out.println("3.Print The Receipt");
 
         System.out.println("4.Exit!");
     }
