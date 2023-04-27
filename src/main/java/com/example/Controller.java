@@ -109,7 +109,7 @@ public class Controller {
         }
     }
 
-    public static void writeCartsToFile(List<ShoppingCart1> shoppingCarts) {
+    public static void writeCartsToFile(List<ShoppingCart> shoppingCarts) {
         String couponn;
         LocalDateTime createId = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("ddMMyyHHmmss");
@@ -118,7 +118,7 @@ public class Controller {
         String productTitle = "Type,Name,Description,Quantity,Price,Weight,Gift,Coupon,TaxType";
         try (FileWriter fw = new FileWriter(fileName2)) {
             fw.write(cartTitle + "\n");
-            for (ShoppingCart1 cart : shoppingCarts) {
+            for (ShoppingCart cart : shoppingCarts) {
                 Coupon coupon = cart.getAppliedCoupon();
                 if (coupon != null) {
                     couponn = String.format("%s-%s-%.5f", coupon.getType(), coupon.getProduct(),
@@ -134,6 +134,7 @@ public class Controller {
                 String weight = "";
                 String cp;
                 Collection<Product> items = cart.getItemsList().values();
+                System.out.println(items);
                 for (Product p : items) {
                     if (p instanceof PhysicalProducts) {
                         PhysicalProducts phy = (PhysicalProducts) p;
@@ -168,7 +169,7 @@ public class Controller {
             BufferedReader in = new BufferedReader(fileReader);
             String line;
             in.readLine();
-            ShoppingCart1 sc;
+            ShoppingCart sc;
             while ((line = in.readLine()) != null) {
                 String[] elements = line.split(",");
                 String cartId = elements[0];
@@ -179,10 +180,12 @@ public class Controller {
                     couponName = couponInfos[1];
                 }
 
-                sc = new ShoppingCart1(cartId, store);
+                sc = new ShoppingCart(cartId, store);
+                // System.out.println(sc);
                 String line2 = in.readLine();
                 String[] len = line2.split(":");
                 int length = Integer.parseInt(len[1]);
+                // System.out.println(length);
 
                 String line3 = in.readLine();
                 String productsLines;
@@ -193,6 +196,7 @@ public class Controller {
                     String name = pInfos[1];
                     String description = pInfos[2];
                     int quantity = Integer.parseInt(pInfos[3]);
+                    // System.out.println(quantity);
                     double price = Double.parseDouble(pInfos[4]);
                     double weight;
                     if (type.equals("physical")) {
@@ -220,12 +224,18 @@ public class Controller {
                         p.setMessage(message);
                         p.setCoupon(coupon);
                     }
+                    // System.out.println(p);
                     for (int i = 0; i < quantity; i++) {
+                        // System.out.println(i);
                         sc.addItem(p);
+                        // System.out.println("hi");
                     }
 
                 }
-                sc.applyCoupon(couponName);
+                // System.out.println(couponName);
+                if(!couponName.equals("")){
+                    sc.applyCoupon(couponName);
+                }
                 cartsManager.addCart(sc);
             }
             in.close();

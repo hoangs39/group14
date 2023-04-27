@@ -1,33 +1,40 @@
 package com.example;
 
+import java.util.Map;
 import java.util.Set;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.stream.Stream;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 public class ShoppingCart {
     // list of product name inside the cart
-    private Set<Product> itemsList;
+    private Map<Integer, Product> itemsList;
+    private Map<String, Integer> countItems;
+    private ProductsManager store;
     // list of coupon inside the cart
     private Set<Coupon> coupons;
     // applied coupon
     private Coupon appliedCoupon;
-    private ProductsManager store;
     // id of the cart
     private String cartId;
+    // private ProductsManager store;
     private double totalWeight;
     private final double BASE_FEE = 0.1;
     private double totalPrice;
+    private int itemId;
 
-    // constructor
     public ShoppingCart(String id, ProductsManager store) {
         this.cartId = id;
-        this.itemsList = new HashSet<>();
+        this.store = store;
+        this.itemsList = new HashMap<>();
         this.coupons = new HashSet<>();
+        this.countItems = new HashMap<>();
         totalWeight = 0.0;
         totalPrice = 0.0;
-        this.store = store;
+        itemId = 1;
     }
 
     /**
@@ -35,34 +42,41 @@ public class ShoppingCart {
      */
     @Override
     public String toString() {
-        if (getItemsList().isEmpty()) {
-            return String.format("Cart %s: There are no products in this cart!", cartId);
+
+        if (!getItemsList().isEmpty()) {
+            double amount = cartAmount();
+            return String.format("Cart %s: weight= %,.2f, price= %,.2f",
+                    cartId, getTotalWeight(), amount);
+
         }
-        return String.format("Cart %s: weight= %,.2f, price= %,.2f",
-                cartId, this.getTotalWeight(), cartAmount());
+        return String.format("Cart %s: There are no products in this cart!", cartId);
     }
 
-    public String printItemsList() {
-        String productsInfo = "";
-        StringBuilder sb = new StringBuilder();
-        for (Product product : itemsList) {
-            String productInfo = String.format("Name:%s Price:%.5f QuantityInCart:%d Tax:%.5f", product.getName(), product.getPrice(),
-                    product.getAvailableQuantity(),
-                    product.getTaxAmount());
-            productsInfo = sb.append(productInfo).append("||").toString();
-        }
-        return productsInfo;
+    public void printItemsList() {
+        Set<Map.Entry<Integer,Product>> entries = itemsList.entrySet();
+        Stream<Map.Entry<Integer,Product>> entriesStream = entries.stream();
+        entriesStream
+        .forEach((m) -> {
+            System.out.printf("id: %d Name: %s Price: %.2f Tax:%.5f Message: %s\n",m.getKey()
+            ,m.getValue().getName()
+            ,m.getValue().getPrice()
+            ,m.getValue().getTaxAmount(),m.getValue().getMessage());});
+        return;
     }
 
     /**
-     * search Product in the cart based on the name
+     * search Product in the cart based on the name and id
      * 
+     * @param p  name of the product
+     * @param id of the product
      * @return Product object for further convinences
      */
-    public Product searchItem(String p) {
-        for (Product product : itemsList) {
-            if (product.getName().equals(p)) {
-                return product;
+    public Product searchItem(String p, int id) {
+        Iterator<Map.Entry<Integer, Product>> iterator = itemsList.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, Product> entry = iterator.next();
+            if (entry.getKey() == Integer.valueOf(id) && entry.getValue().getName().equals(p)) {
+                return entry.getValue();
             }
         }
         return null;
@@ -71,67 +85,67 @@ public class ShoppingCart {
     /**
      * add item to item list
      * 
-     * @param p the product used for adding
+     * @param p the product name used for adding
      *          <p>
      *          add product to items map
-     *          then add coupon to coupons list if product has a coupon
+     *          then add coupon to copouns list if product has a copoun
      *          and substract the quantity of product
      *          </p>
      * @return boolean true if success / false if not work
      */
     public boolean addItem(Product p) {
-        // check if items in the store
-        Product item = store.getProductByName(p.getName());
-        // System.out.println(item);
-        if (item.getAvailableQuantity() != 0) {
-            if (!itemsList.contains(item)) {
-                Product product = null;
-                if (item instanceof PhysicalProducts) {
-
-                    if (!itemsList.contains(item)) {
-                        product = new PhysicalProducts(item.getName(), item.getPrice(), item.getDescription(), 1,
-                                item.getTaxType());
-
-                        PhysicalProducts phy = (PhysicalProducts) product;
-                        PhysicalProducts phyItem = (PhysicalProducts) item;
-
-                        phy.setWeight(phyItem.getWeight());
-                        product.setCreateGift(item.getCreateGift());
-                        Coupon coupon = item.getCoupon();
-                        if (coupon != null) {
-                            coupons.add(coupon);
-                        }
-                        itemsList.add(product);
-                        p.decreaseQuantity(1);
-                        cartAmount();
-                        return true;
-                    }
-                } else {
-                    product = new DigitalProduct(item.getName(), item.getPrice(), item.getDescription(), 1,
-                            item.getTaxType());
-                    product.setCreateGift(item.getCreateGift());
-                    itemsList.add(product);
-                    p.decreaseQuantity(1);
-                    Coupon coupon = item.getCoupon();
-                    if (coupon != null) {
-                        coupons.add(coupon);
-                    }
-                    cartAmount();
-                    return true;
-                }
-            } else {
-                Product prt = searchItem(item.getName());
-                prt.setAvailableQuantity(prt.getAvailableQuantity() + 1);
-                Coupon coupon = item.getCoupon();
-                if (coupon != null) {
-                    coupons.add(coupon);
-                }
-                p.decreaseQuantity(1);
-                cartAmount();
-                return true;
+        Product product = store.getProductByName(p.getName());
+        // create a single product that can be modified its msg indepently
+        // to others product with the same name in the Product manager
+        Product item = createItem(product);
+        item.setCreateGift(product.getCreateGift());
+        if (product.getAvailableQuantity() != 0) {
+            itemsList.put(Integer.valueOf(itemId++), item);
+            product.decreaseQuantity(1);
+            countTheNumberOfItems(item.getName());
+            // System.out.println(item);
+            if (product.getCoupon() != null) {
+                Coupon coupon = product.getCoupon();
+                coupons.add(coupon);
             }
+            cartAmount();
+            return true;
         }
         return false;
+    }
+
+    private void countTheNumberOfItems(String product) {
+        if (!countItems.containsKey(product)) {
+            countItems.put(product, 1);
+        } else {
+            countItems.put(product, countItems.get(product) + 1);
+        }
+    }
+
+    /**
+     * create an unique item
+     * 
+     * @param p the product name that used for create item
+     *          <p>
+     *          create an unique Product item in cart
+     *          that takes data from the product in the product manager,
+     *          where just only store the data of products with same name, not a
+     *          single unique product
+     *          </p>
+     * @return Product item that is unique
+     */
+    private Product createItem(Product p) {
+        if (p instanceof PhysicalProducts) {
+            PhysicalProducts phy = (PhysicalProducts) p;
+            PhysicalProducts item = new PhysicalProducts(p.getName(), p.getPrice(), p.getDescription(), 1,
+                    p.getTaxType());
+            item.setWeight(phy.getWeight());
+            return item;
+        } else {
+            DigitalProduct digitalProduct = new DigitalProduct(p.getName(), p.getPrice(), p.getDescription(), 1,
+                    p.getTaxType());
+            return digitalProduct;
+        }
     }
 
     // calculate the size of the map
@@ -140,62 +154,97 @@ public class ShoppingCart {
     }
 
     /**
+     * remove item to item list based on id
+     * 
+     * @param p  the product name used for removing
+     * @param id the id of a specific item
+     *           <p>
+     *           remove product from items map based on its name and id
+     *           then add the quatity of the product
+     *           and remove coupon to copouns list
+     *           if there are no left coressponding product in the list
+     *           </p>
+     * @return boolean true if success / false if not work
+     */
+    public boolean removeItemById(int id) {
+        if (itemsList.containsKey(id)) {
+            Product product = store.getProductByName(itemsList.get(id).getName());
+            if (product != null) {
+                product.increaseQuantity(1);
+            }
+            if (countItems.get(itemsList.get(id).getName()) > 0) {
+                countItems.put(itemsList.get(id).getName(), countItems.get(itemsList.get(id).getName()) - 1);
+            }
+            if (countItems.get(itemsList.get(id).getName()) == 0) {
+                countItems.remove(itemsList.get(id).getName());
+                if(getAppliedCoupon() != null){
+                    if (getAppliedCoupon().getProduct().equals(itemsList.get(id).getName())) {
+                        setAppliedCoupon(null);
+                    }
+                }
+                removeCoupon(itemsList.get(id).getName());
+            }
+            itemsList.remove(id);
+            cartAmount();
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * remove item to item list
      * 
-     * @param p the product used for removing
+     * @param p the product name used for removing
      *          <p>
-     *          remove product from items set
+     *          remove product from items map
      *          then add the quatity of the product
-     *          and remove coupon to coupons list
+     *          and remove coupon to copouns list
      *          if there are no left coressponding product in the list
      *          </p>
      * @return boolean true if success / false if not work
      */
+
     public boolean removeItem(String p) {
-        for (Product product : itemsList) {
-            if (product.getName().equals(p)) {
-                Product pr = store.getProductByName(p);
-                pr.increaseQuantity(1);
-                product.decreaseQuantity(1);
-                if (product.getAvailableQuantity() == 0) {
-                    removeCoupon(product);
-                    itemsList.remove(product);
+        Iterator<Map.Entry<Integer, Product>> iterator = itemsList.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, Product> entry = iterator.next();
+            if (entry.getValue().getName().equals(p)) {
+                if (countItems.get(p) > 0) {
+                    countItems.put(p, countItems.get(p) - 1);
+                } else {
+                    countItems.remove(p);
+                }
+                Product product = store.getProductByName(p);
+                if (product != null) {
+                    product.increaseQuantity(1);
+                }
+                if (countItems.get(p) == 0) {
+                    Coupon c = getAppliedCoupon();
+                    if (c != null && c.getProduct().equals(p)) {
+                        setAppliedCoupon(null);
+                    }
+                    removeCoupon(p);
                 }
                 cartAmount();
-                return true;
+                iterator.remove();
             }
         }
-        return false;
-    }
-
-    // remove all items, whics have that name
-    public boolean removeItemAll(String p) {
-        for (Product product : itemsList) {
-            if (product.getName().equals(p)) {
-                Product pr = store.getProductByName(p);
-                pr.increaseQuantity(product.getAvailableQuantity());
-                itemsList.remove(product);
-                removeCoupon(pr);
-                cartAmount();
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
 
     // change all items, whics have that name
     public boolean changeItemAll(Product p) {
-        for (Product product : itemsList) {
+        Collection<Product> items = itemsList.values();
+        for (Product product : items) {
             if (product.getName().equals(p.getName())) {
                 product.setPrice(p.getPrice());
                 product.setDescription(p.getDescription());
                 product.setTaxType(p.getTaxType());
                 product.calculateTax(p.getTaxType());
-                cartAmount();
-                return true;
             }
         }
-        return false;
+        cartAmount();
+        return true;
     }
 
     /**
@@ -206,8 +255,8 @@ public class ShoppingCart {
      * @param message the new message of the Product item
      * @return boolean if found / null if not found
      */
-    public boolean addMessage(String p, String message) {
-        Product product = searchItem(p);
+    public boolean addMessage(String p, int id, String message) {
+        Product product = searchItem(p, id);
         if (product != null && product.getCreateGift()) {
             product.setMessage(message);
             return true;
@@ -219,12 +268,13 @@ public class ShoppingCart {
      * Search For item in the item list and then get/set message for the Product
      * item
      * 
-     * @param p the product name used for searching
+     * @param p  the product name used for searching
+     * @param id id of product
      * @return String if found / null if not found
      */
-    public String getMessage(String p) {
-        Product product = searchItem(p);
-        if (product != null && product.getCreateGift() && product.getMessage() != null) {
+    public String getMessage(String p, int id) {
+        Product product = searchItem(p, id);
+        if (product != null && product.getMessage() != null && product.getCreateGift()) {
             return product.getMessage();
         }
         return "Empty!";
@@ -247,27 +297,26 @@ public class ShoppingCart {
     public double cartAmount() {
         resetAll();
         double productPrice = 0;
-        double productWeight = 0;
-        for (Product product : itemsList) {
-            int amount = product.getAvailableQuantity();
-            productPrice = (product.getPrice() + product.getTaxAmount()) * amount;
-            // calculate the weight
-            if (product instanceof PhysicalProducts) {
-                PhysicalProducts phy = (PhysicalProducts) product;
-                productWeight += (phy.getWeight() * amount);
-                totalWeight += productWeight;
-            }
-            productPrice += (productWeight * BASE_FEE);
-            // if there any apply coupon then apply it to corresponding products
-            if (this.appliedCoupon != null && this.appliedCoupon.getProduct().equals(product.getName())) {
-                if (this.appliedCoupon.getType().equals("percent")) {
-                    productPrice *= (1 - (appliedCoupon.getValue() / 100));
-                } else if (this.appliedCoupon.getType().equals("price")) {
-                    productPrice -= this.appliedCoupon.getValue() * amount;
+        if (!getItemsList().isEmpty()) {
+            Iterator<Map.Entry<Integer, Product>> iterator = itemsList.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<Integer, Product> entry = iterator.next();
+                Product product = entry.getValue();
+                productPrice = product.getPrice() + product.getTaxAmount();
+                if (product instanceof PhysicalProducts) {
+                    PhysicalProducts phy = (PhysicalProducts) product;
+                    totalWeight += phy.getWeight();
                 }
+                if (this.appliedCoupon != null && this.appliedCoupon.getProduct().equals(product.getName())) {
+                    if (this.appliedCoupon.getType().equals("percent")) {
+                        productPrice *= (1 - (appliedCoupon.getValue() / 100));
+                    } else if (this.appliedCoupon.getType().equals("price")) {
+                        productPrice -= this.appliedCoupon.getValue();
+                    }
+                }
+                totalPrice += productPrice;
             }
-            totalPrice += productPrice;
-            productWeight = 0;
+            totalPrice += (totalWeight *BASE_FEE); 
         }
         return totalPrice;
     }
@@ -280,26 +329,31 @@ public class ShoppingCart {
 
     /**
      * assign the Coupon based on the name
-     * <p>
-     * if there is any the coupon that has the product name in the coupons list
-     * then assign it to appiled coupon and re-calculate the price
-     * </p>
      * 
-     * @return applied coupon
+     * @param p Product that might be inside the cart
+     *          <p>
+     *          if there is any the coupon that has the product name in the coupons
+     *          list
+     *          then assign it to appiled coupon and re-calculate the price
+     *          </p>
+     * @return applied copoun
      */
     public Coupon applyCoupon(String p) {
-        Product product = searchItem(p);
-        if (product != null) {
-            this.appliedCoupon = searchCoupon(p);
+        if(countItems.containsKey(p)){
+            if (countItems.get(p) > 0) {
+                this.appliedCoupon = searchCoupon(p);
+                // System.out.println(this.appliedCoupon.getProduct());
+            }
         }
         cartAmount();
         return this.appliedCoupon;
     }
 
     /**
-     * search coupon based on the name
+     * search copoun based on the name
      * 
-     * @return searched coupon
+     * @param p name of the product that owns the coupon
+     * @return searched copoun
      */
     public Coupon searchCoupon(String p) {
         for (Coupon coupon : coupons) {
@@ -319,11 +373,11 @@ public class ShoppingCart {
      * 
      * @return boolean
      */
-    public boolean removeCoupon(Product p) {
-        Coupon coupon = searchCoupon(p.getName());
+    public boolean removeCoupon(String p) {
+        Coupon coupon = searchCoupon(p);
         if (coupon != null) {
             getCoupons().remove(coupon);
-            this.appliedCoupon = null;
+            setAppliedCoupon(null);
             cartAmount();
             return true;
         }
@@ -332,17 +386,17 @@ public class ShoppingCart {
 
     public void displayAllCoupons() {
         for (Coupon coupon : coupons) {
-            System.out.println("Type:" +coupon.getType() + "|" + "Value:"+coupon.getValue() + "|" + "Product:" +
+            System.out.println("Type:" + coupon.getType() + "|" + "Value:" + coupon.getValue() + "|" + "Product:" +
                     coupon.getProduct());
         }
     }
 
     // getters, setters
-    public Set<Product> getItemsList() {
+    public Map<Integer, Product> getItemsList() {
         return itemsList;
     }
 
-    public void setItemsList(Set<Product> itemsList) {
+    public void setItemsList(Map<Integer, Product> itemsList) {
         this.itemsList = itemsList;
     }
 
