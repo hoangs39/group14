@@ -323,6 +323,7 @@ public class ShoppingCart {
         Coupon coupon = searchCoupon(p.getName());
         if (coupon != null) {
             getCoupons().remove(coupon);
+            this.appliedCoupon = null;
             cartAmount();
             return true;
         }
