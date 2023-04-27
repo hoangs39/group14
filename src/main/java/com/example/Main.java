@@ -349,16 +349,16 @@ public class Main {
                         shoppingCart.displayAllCoupons();
                         System.out.println();
                         applyCouponsToCart(shoppingCart, sc);
-                        System.out.println("Sucessfully!");
+                        System.out.println("Successfully!");
                     }
                     break;
                 case 2:
                     shoppingCart.displayAllCoupons();
                     System.out.println();
                     if(removeCouponsFromCart(shoppingCart, sc)){
-                        System.out.println("Sucessfully!");
+                        System.out.println("Successfully!");
                     }else{
-                        System.out.println("Sucessfully!");
+                        System.out.println("Successfully!");
                     }
                     break;
                 case 3:
