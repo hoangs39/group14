@@ -74,7 +74,7 @@ public class ShoppingCart {
      * @param p the product used for adding
      *          <p>
      *          add product to items map
-     *          then add coupon to coupons list if product has a copoun
+     *          then add coupon to coupons list if product has a coupon
      *          and substract the quantity of product
      *          </p>
      * @return boolean true if success / false if not work
@@ -285,7 +285,7 @@ public class ShoppingCart {
      * then assign it to appiled coupon and re-calculate the price
      * </p>
      * 
-     * @return applied copoun
+     * @return applied coupon
      */
     public Coupon applyCoupon(String p) {
         Product product = searchItem(p);
@@ -297,9 +297,9 @@ public class ShoppingCart {
     }
 
     /**
-     * search copoun based on the name
+     * search coupon based on the name
      * 
-     * @return searched copoun
+     * @return searched coupon
      */
     public Coupon searchCoupon(String p) {
         for (Coupon coupon : coupons) {

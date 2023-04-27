@@ -320,7 +320,7 @@ public class Main {
     public static void menuCoupons() {
         System.out.println("\n******************************************");
         System.out.println("1.Apply Coupons to Cart");
-        System.out.println("2.Remove Copoun in Cart");
+        System.out.println("2.Remove Coupon in Cart");
         System.out.println("3.Exit!");
     }
 
@@ -342,7 +342,7 @@ public class Main {
                 // view products
                 case 1:
                     if (shoppingCart.getAppliedCoupon() != null) {
-                        System.out.println("This Cart had an applied copoun already!");
+                        System.out.println("This Cart had an applied coupon already!");
                     } else {
                         System.out.println(shoppingCart.printItemsList());
                         shoppingCart.displayAllCoupons();
