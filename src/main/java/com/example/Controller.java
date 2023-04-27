@@ -1,5 +1,6 @@
 package com.example;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.io.BufferedReader;
@@ -108,7 +109,7 @@ public class Controller {
         }
     }
 
-    public static void writeCartsToFile(List<ShoppingCart> shoppingCarts) {
+    public static void writeCartsToFile(List<ShoppingCart1> shoppingCarts) {
         String couponn;
         LocalDateTime createId = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("ddMMyyHHmmss");
@@ -117,7 +118,7 @@ public class Controller {
         String productTitle = "Type,Name,Description,Quantity,Price,Weight,Gift,Coupon,TaxType";
         try (FileWriter fw = new FileWriter(fileName2)) {
             fw.write(cartTitle + "\n");
-            for (ShoppingCart cart : shoppingCarts) {
+            for (ShoppingCart1 cart : shoppingCarts) {
                 Coupon coupon = cart.getAppliedCoupon();
                 if (coupon != null) {
                     couponn = String.format("%s-%s-%.5f", coupon.getType(), coupon.getProduct(),
@@ -132,7 +133,8 @@ public class Controller {
                 fw.write(productTitle + "\n");
                 String weight = "";
                 String cp;
-                for (Product p : cart.getItemsList()) {
+                Collection<Product> items = cart.getItemsList().values();
+                for (Product p : items) {
                     if (p instanceof PhysicalProducts) {
                         PhysicalProducts phy = (PhysicalProducts) p;
                         weight = String.format("%.5f", phy.getWeight());
@@ -166,7 +168,7 @@ public class Controller {
             BufferedReader in = new BufferedReader(fileReader);
             String line;
             in.readLine();
-            ShoppingCart sc;
+            ShoppingCart1 sc;
             while ((line = in.readLine()) != null) {
                 String[] elements = line.split(",");
                 String cartId = elements[0];
@@ -177,7 +179,7 @@ public class Controller {
                     couponName = couponInfos[1];
                 }
 
-                sc = new ShoppingCart(cartId, store);
+                sc = new ShoppingCart1(cartId, store);
                 String line2 = in.readLine();
                 String[] len = line2.split(":");
                 int length = Integer.parseInt(len[1]);

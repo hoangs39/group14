@@ -24,7 +24,6 @@ public class Main {
         System.out.println("3.Handle Gift-Items:");
         System.out.println("4.Handle Coupons:");
         System.out.println("5.Handle the Cart's List:");
-        ;
         System.out.println("6.Exit!");
     }
 
@@ -211,7 +210,7 @@ public class Main {
             System.out.println();
             System.out.println("Please enter the cartId:");
             String cartId = sc.nextLine();
-            ShoppingCart shoppingCart = cartsManager.getCartById(cartId);
+            ShoppingCart1 shoppingCart = cartsManager.getCartById(cartId);
             switch (choice) {
                 // view products
                 case 1:
@@ -238,20 +237,20 @@ public class Main {
         }
     }
 
-    public static boolean addItemToCart(ShoppingCart shoppingCart, Scanner sc) {
+    public static boolean addItemToCart(ShoppingCart1 shoppingCart, Scanner sc) {
         System.out.println("Enter the name of product you want:");
         String name = sc.nextLine();
         Product p = store.getProductByName(name);
         return shoppingCart.addItem(p);
     }
 
-    public static boolean removeItemInSideCart(ShoppingCart shoppingCart, Scanner sc) {
+    public static boolean removeItemInSideCart(ShoppingCart1 shoppingCart, Scanner sc) {
         System.out.println("Enter the name of product you want:");
         String name = sc.nextLine();
         return shoppingCart.removeItem(name);
     }
 
-    public static boolean removeItems(ShoppingCart shoppingCart, Scanner sc) {
+    public static boolean removeItems(ShoppingCart1 shoppingCart, Scanner sc) {
         System.out.println("Enter the name of product you want:");
         String name = sc.nextLine();
         return shoppingCart.removeItemAll(name);
@@ -277,18 +276,18 @@ public class Main {
             cartsManager.displayCarts();
             System.out.println("Please enter the cartId:");
             String cartId = sc.nextLine();
-            ShoppingCart shoppingCart = cartsManager.getCartById(cartId);
+            ShoppingCart1 shoppingCart = cartsManager.getCartById(cartId);
             switch (choice) {
                 // view products
                 case 1:
-                    System.out.println(shoppingCart.printItemsList());
+                    shoppingCart.printItemsList();
                     System.out.println();
                     if (!updateGift(shoppingCart, sc)) {
                         System.out.println("This items is not supported for gift!");
                     }
                     break;
                 case 2:
-                    System.out.println(shoppingCart.printItemsList());
+                    shoppingCart.printItemsList();
                     System.out.println();
                     System.out.println(viewGift(shoppingCart, sc));
                     break;
@@ -301,20 +300,24 @@ public class Main {
         }
     }
 
-    public static boolean updateGift(ShoppingCart shoppingCart, Scanner sc) {
+    public static boolean updateGift(ShoppingCart1 shoppingCart, Scanner sc) {
         System.out.println("Enter the product:");
         String name = sc.nextLine();
         System.out.println("Enter the message:");
         String msg = sc.nextLine();
+        System.out.println("Enter the Id:");
+        int id = Integer.parseInt(sc.nextLine());
 
-        return shoppingCart.addMessage(name, msg);
+        return shoppingCart.addMessage(name, id,msg);
 
     }
 
-    public static String viewGift(ShoppingCart shoppingCart, Scanner sc) {
+    public static String viewGift(ShoppingCart1 shoppingCart, Scanner sc) {
         System.out.println("Enter the product:");
         String name = sc.nextLine();
-        return shoppingCart.getMessage(name);
+        System.out.println("Enter the Id:");
+        int id = Integer.parseInt(sc.nextLine());
+        return shoppingCart.getMessage(name, id);
     }
 
     public static void menuCoupons() {
@@ -337,7 +340,7 @@ public class Main {
             } while (choice < 1 && choice > 3);
             System.out.println("Please enter the cartId:");
             String cartId = sc.nextLine();
-            ShoppingCart shoppingCart = cartsManager.getCartById(cartId);
+            ShoppingCart1 shoppingCart = cartsManager.getCartById(cartId);
             switch (choice) {
                 // view products
                 case 1:
@@ -345,7 +348,7 @@ public class Main {
                         System.out.println("This Cart had an applied coupon already!");
                     } else {
                         System.out.print("Products in the cart: ");
-                        System.out.println(shoppingCart.printItemsList());
+                        shoppingCart.printItemsList();
                         System.out.print("Available coupons in the cart: ");
                         if(shoppingCart.getCoupons().size() != 0){
                             shoppingCart.displayAllCoupons();
@@ -381,7 +384,7 @@ public class Main {
         }
     }
 
-    public static Coupon applyCouponsToCart(ShoppingCart shoppingCart, Scanner sc) {
+    public static Coupon applyCouponsToCart(ShoppingCart1 shoppingCart, Scanner sc) {
         System.out.println("Enter the coupon's product:");
         String name = sc.nextLine();
         if(shoppingCart.searchCoupon(name) == null){
@@ -393,11 +396,13 @@ public class Main {
         }
     }
 
-    public static boolean removeCouponsFromCart(ShoppingCart shoppingCart, Scanner sc) {
+    public static boolean removeCouponsFromCart(ShoppingCart1 shoppingCart, Scanner sc) {
         System.out.println("Enter the product:");
         String name = sc.nextLine();
-        Product p = shoppingCart.searchItem(name);
-        return shoppingCart.removeCoupon(p);
+        System.out.println("Enter the Id:");
+        int id = Integer.parseInt(sc.nextLine());
+        Product p = shoppingCart.searchItem(name,id);
+        return shoppingCart.removeCoupon(p.getName());
     }
 
     public static void menuCartsUI() {
@@ -428,10 +433,10 @@ public class Main {
                         System.out.println();
                         System.out.println("Please enter the cartId:");
                         String cartId = sc.nextLine();
-                        ShoppingCart shoppingCart = cartsManager.getCartById(cartId);
+                        ShoppingCart1 shoppingCart = cartsManager.getCartById(cartId);
                         System.out.println();
                         System.out.println(shoppingCart.toString());
-                        System.out.println(shoppingCart.printItemsList());
+                        shoppingCart.printItemsList();
                     } else {
                         System.out.println("Empty!");
                     }

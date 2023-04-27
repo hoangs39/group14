@@ -7,7 +7,7 @@ import java.util.List;
 
 public class CartsManager {
     // CartsManager's attributes
-    List<ShoppingCart> shoppingCarts;
+    List<ShoppingCart1> shoppingCarts;
 
     // constructors
     public CartsManager(){
@@ -22,7 +22,7 @@ public class CartsManager {
      * Print success/fail message
      * </p>
      */
-    public boolean addCart(ShoppingCart cart){
+    public boolean addCart(ShoppingCart1 cart){
         if(!shoppingCarts.contains(cart)){
             shoppingCarts.add(cart);
             return true;
@@ -40,9 +40,9 @@ public class CartsManager {
      * @param searchCartId the search cart id
      * @return shopping cart if found / null if not found
      */
-    public ShoppingCart getCartById(String id){
+    public ShoppingCart1 getCartById(String id){
         if (shoppingCarts != null) {
-            for (ShoppingCart shoppingCart : shoppingCarts) {
+            for (ShoppingCart1 shoppingCart : shoppingCarts) {
                 if (id.equals(shoppingCart.getCartId())) return shoppingCart;
             }
             return null;
@@ -55,9 +55,9 @@ public class CartsManager {
      * sort shopping carts list by cart's total weight in increasing order
      */
     public void speedUpShipping(){
-            shoppingCarts.sort(new Comparator<ShoppingCart>() {
+            shoppingCarts.sort(new Comparator<ShoppingCart1>() {
                 @Override
-                public int compare(ShoppingCart o1, ShoppingCart o2) {
+                public int compare(ShoppingCart1 o1, ShoppingCart1 o2) {
                     boolean greater = o1.getTotalWeight() > o2.getTotalWeight();
                     boolean equal = o1.getTotalWeight() == o2.getTotalWeight();
                     if(greater){
@@ -82,9 +82,9 @@ public class CartsManager {
      */
     public String buy(){
         double payment = 0.0;
-        for (ShoppingCart shoppingCart : shoppingCarts) {
+        for (ShoppingCart1 shoppingCart : shoppingCarts) {
             System.out.println(shoppingCart.toString());
-            System.out.println(shoppingCart.printItemsList());
+            shoppingCart.printItemsList();
             payment += shoppingCart.getTotalPrice();
         }
         String noti = String.format("You have done your shopping and this is you bill: %.2f", payment);
@@ -96,7 +96,7 @@ public class CartsManager {
     // display all the carts'information in the list
     public void displayCarts(){
         speedUpShipping();
-        for (ShoppingCart shoppingCart : shoppingCarts) {
+        for (ShoppingCart1 shoppingCart : shoppingCarts) {
             shoppingCart.cartAmount();
             System.out.println(shoppingCart.toString());
         }
@@ -105,7 +105,7 @@ public class CartsManager {
 
     // change all carts's total price whenever there is a change inside the products list
     public boolean change(Product p) {
-        for (ShoppingCart shoppingCart : shoppingCarts) {
+        for (ShoppingCart1 shoppingCart : shoppingCarts) {
             shoppingCart.changeItemAll(p);
         }
         return true;
@@ -113,13 +113,13 @@ public class CartsManager {
 
     // remove a cart's product whenever there is a removal inside the products list
     public boolean removeItemInCart(Product p) {
-        for (ShoppingCart shoppingCart : shoppingCarts) {
+        for (ShoppingCart1 shoppingCart : shoppingCarts) {
             shoppingCart.removeItem(p.getName());
         }
         return true;
     }
     
-    public List<ShoppingCart> getShoppingCarts() {
+    public List<ShoppingCart1> getShoppingCarts() {
         return shoppingCarts;
     }
 

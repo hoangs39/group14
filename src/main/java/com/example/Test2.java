@@ -1,7 +1,20 @@
 package com.example;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Test2 {
     public static void main(String[] args) {
+        Map<Integer,String> map = new HashMap<>();
+        int id = 1;
+        map.put(id++, "1");
+        map.put(id++, "2");
+        int i = 1;
+        while(i <= map.size()){
+            System.out.println("--");
+            i++;
+        }
+
         // Product p1 = new PhysicalProducts("car", 40.0, "new", 4, "luxuryTax");
         // Coupon cp1 = new Coupon(p1.getName(), "percent", 10);
         // p1.setCoupon(cp1);
