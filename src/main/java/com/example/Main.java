@@ -22,7 +22,7 @@ public class Main {
         System.out.println("1.Handling Products:");
         System.out.println("2.Handle Shopping Cart:");
         System.out.println("3.Handle Gift-Items:");
-        System.out.println("4.Handle Copouns:");
+        System.out.println("4.Handle Coupons:");
         System.out.println("5.Handle the Cart's List:");
         ;
         System.out.println("6.Exit!");
@@ -140,12 +140,12 @@ public class Main {
         } else {
             p = new DigitalProduct(name, price, description, quantity, taxType);
         }
-        System.out.println("Do you want to add Copoun (Y or N)?");
+        System.out.println("Do you want to add Coupon (Y or N)?");
         String c = sc.nextLine();
         if (c.equalsIgnoreCase("Y")) {
-            System.out.println("what type of copoun? (percent or price)");
+            System.out.println("what type of coupon? (percent or price)");
             String cType = sc.nextLine();
-            System.out.println("what value of copoun? (0-100% or 0-...)");
+            System.out.println("what value of coupon? (0-100% or 0-...)");
             double cVal = Double.parseDouble(sc.nextLine());
             Coupon coupon = new Coupon(p.getName(), cType, cVal);
             p.setCoupon(coupon);
