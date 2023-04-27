@@ -345,6 +345,7 @@ public class Main {
                         System.out.println("This Cart had an applied coupon already!");
                     } else {
                         System.out.println(shoppingCart.printItemsList());
+                        System.out.print("Existing coupon in the cart: ");
                         shoppingCart.displayAllCoupons();
                         System.out.println();
                         applyCouponsToCart(shoppingCart, sc);
