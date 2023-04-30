@@ -14,7 +14,7 @@ public class PhysicalProducts extends Product{
         super(name, price, description,quantity, taxType);
     }
     
-    // overriden functions
+    //Overriden functions to print the info
     @Override
     public String toString() {
         return String.format("PHYSICAL - %s", getName());

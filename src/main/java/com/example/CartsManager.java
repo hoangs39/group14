@@ -16,11 +16,13 @@ public class CartsManager {
 
     // functions
     /**
-     * create new empty shopping cart
+     * add cart into list of carts
+     * @param searchCartId the search cart id
      * <p>
-     * Create a new empty shopping cart with no product inside
-     * Print success/fail message
+     * add the cart if shopping carts list does not contain it 
+     * and return true, else return false
      * </p>
+     * @return boolean
      */
     public boolean addCart(ShoppingCart cart){
         if(!shoppingCarts.contains(cart)){
@@ -45,7 +47,6 @@ public class CartsManager {
             for (ShoppingCart shoppingCart : shoppingCarts) {
                 if (id.equals(shoppingCart.getCartId())) return shoppingCart;
             }
-            return null;
         }
         return null;
     }
@@ -114,15 +115,16 @@ public class CartsManager {
     // remove a cart's product whenever there is a removal inside the products list
     public boolean removeItemInCart(Product p) {
         for (ShoppingCart shoppingCart : shoppingCarts) {
-            shoppingCart.removeItem(p.getName());
+            shoppingCart.removeItemAll(p.getName());
         }
         return true;
     }
     
+    //getter
     public List<ShoppingCart> getShoppingCarts() {
         return shoppingCarts;
     }
-
+    // count the items that are contained in the list
     public int countCarts() {
         return this.shoppingCarts.size();
     }

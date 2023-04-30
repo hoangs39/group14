@@ -7,7 +7,7 @@ public class DigitalProduct extends Product{
         super(name, price, description,quantity, taxType);
     }
 
-    //Overriden functions
+    //Overriden functions to print the info
     @Override
     public String toString() {
         return String.format("DIGITAL - %s", getName());

@@ -15,7 +15,7 @@ public abstract class Product implements Gift<Product>,Tax{
     //decide to create a gift
     private boolean createGift = false;
 
-
+    // tax value
     private final double TAXFREE = 0;
     private final double TAXNORMAL = 0.1;
     private final double TAXLUXURY = 0.2;
@@ -79,6 +79,7 @@ public abstract class Product implements Gift<Product>,Tax{
             this.message = message;
         }
     }
+    
     // check the equality of products based on thier name and the length of thier name.
     @Override
     public boolean equals(Object other) {

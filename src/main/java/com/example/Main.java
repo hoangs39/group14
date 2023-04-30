@@ -5,18 +5,21 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
+    // scanner for user's input
     static Scanner sc = new Scanner(new FilterInputStream(System.in) {
         @Override
         public void close() throws IOException {
         }
     });
+
+    // read file and assign it new object
     static ProductsManager store = Controller.readProductFromFile();
     static CartsManager cartsManager = Controller.createCartsObject(store);
 
     public static void main(String[] args) {
         start();
     }
-
+    // initial menu
     public static void menu() {
         System.out.println("\n******************************************");
         System.out.println("1.Handling Products:");
@@ -27,6 +30,7 @@ public class Main {
         System.out.println("6.Exit!");
     }
 
+    // first menu
     public static void start() {
         boolean active = true;
         while (active) {
@@ -38,23 +42,23 @@ public class Main {
             } while (choice < 1 && choice > 6);
 
             switch (choice) {
-                // create new Product
+                // view/add/edit item in product list
                 case 1:
                     handleProduct(sc);
                     break;
-                // edit Product
+                // add / remove items in carts
                 case 2:
                     handleCarts(sc);
                     break;
-                // remove Product
+                // update / view message
                 case 3:
                     handleGift(sc);
                     break;
-                // Doing Shopping
+                // apply / remove coupon
                 case 4:
                     handleCoupons(sc);
                     break;
-                // Display Products in WareHouse
+                // display cart's info / Sort carts / print the reciept - store data in file
                 case 5:
                     handleCartUI(sc);
                     break;
@@ -69,6 +73,7 @@ public class Main {
         }
     }
 
+    // sub menu
     public static void menuProduct() {
         System.out.println("\n******************************************");
         System.out.println("1.View all item into our Store");
@@ -76,7 +81,7 @@ public class Main {
         System.out.println("3.Edit items inside our Store");
         System.out.println("4.Exit!");
     }
-
+    // sub menu
     public static void handleProduct(Scanner sc) {
         boolean active = true;
         while (active) {
@@ -88,14 +93,16 @@ public class Main {
             } while (choice < 1 && choice > 4);
 
             switch (choice) {
-                // view products
                 case 1:
+                    // view items
                     store.getAllProducts();
                     break;
                 case 2:
+                    //create and then  add items to product list
                     addProduct(sc);
                     break;
                 case 3:
+                    // edit items in list of products
                     store.getAllProducts();
                     System.out.println();
                     System.out.println("Please enter the product's name");
@@ -110,6 +117,7 @@ public class Main {
         }
     }
 
+    // create items and then add it to new ProductManager object for later usage
     public static boolean addProduct(Scanner sc) {
         Product p;
         System.out.println("Please enter type you want for the item (PHYSICAL or DIGITAL):");
@@ -157,6 +165,7 @@ public class Main {
         return store.addProduct(p);
     }
 
+    // edit items' infomation in then change all info in cart
     public static boolean editProduct(String pName) {
         Product p = store.getProductByName(pName);
         // change product in product list
@@ -215,16 +224,19 @@ public class Main {
             switch (choice) {
                 // view products
                 case 1:
+                // add items to cart based on what are displayed
                     store.getAllProducts();
                     System.out.println();
                     addItemToCart(shoppingCart, sc);
                     break;
                 case 2:
+                // remove all items that has the same name
                     shoppingCart.printItemsList();
                     System.out.println();
                     removeItems(shoppingCart, sc);
                     break;
                 case 3:
+                // remove 1 item out of cart
                     shoppingCart.printItemsList();
                     System.out.println();
                     removeItemInSideCart(shoppingCart, sc);
@@ -238,6 +250,7 @@ public class Main {
         }
     }
 
+    // add items to cart
     public static boolean addItemToCart(ShoppingCart shoppingCart, Scanner sc) {
         System.out.println("Enter the name of product you want:");
         String name = sc.nextLine();
@@ -245,16 +258,17 @@ public class Main {
         return shoppingCart.addItem(p);
     }
 
+    // remove 1 item based on its id
     public static boolean removeItemInSideCart(ShoppingCart shoppingCart, Scanner sc) {
         System.out.println("Enter the Id:");
         int id = Integer.parseInt(sc.nextLine());
         return shoppingCart.removeItemById(id);
     }
-
+    // remove items based on thier name
     public static boolean removeItems(ShoppingCart shoppingCart, Scanner sc) {
         System.out.println("Enter the Name:");
         String name= sc.nextLine();
-        return shoppingCart.removeItem(name);
+        return shoppingCart.removeItemAll(name);
         
     }
 
@@ -282,6 +296,7 @@ public class Main {
             switch (choice) {
                 // view products
                 case 1:
+                // add gift's msg
                     shoppingCart.printItemsList();
                     System.out.println();
                     if (!updateGift(shoppingCart, sc)) {
@@ -289,6 +304,7 @@ public class Main {
                     }
                     break;
                 case 2:
+                // view msg
                     shoppingCart.printItemsList();
                     System.out.println();
                     System.out.println(viewGift(shoppingCart, sc));
@@ -302,6 +318,8 @@ public class Main {
         }
     }
 
+
+    // add gift's msg by searching items in cart with its name and id
     public static boolean updateGift(ShoppingCart shoppingCart, Scanner sc) {
         System.out.println("Enter the Id:");
         int id = Integer.parseInt(sc.nextLine());
@@ -314,7 +332,7 @@ public class Main {
         return shoppingCart.addMessage(name,id,msg);
 
     }
-
+    // view gift's msg by searching items in cart with its name and id
     public static String viewGift(ShoppingCart shoppingCart, Scanner sc) {
         System.out.println("Enter the product:");
         String name = sc.nextLine();
@@ -348,6 +366,7 @@ public class Main {
             switch (choice) {
                 // view products
                 case 1:
+                // apply coupons
                     if (shoppingCart.getAppliedCoupon() != null) {
                         System.out.println("This Cart had an applied coupon already!");
                     } else {
@@ -365,6 +384,7 @@ public class Main {
                     }
                     break;
                 case 2:
+                // remove the coupons
                     if(shoppingCart.getCoupons().size() != 0){
                         shoppingCart.printItemsList();
                         System.out.println();
@@ -389,6 +409,7 @@ public class Main {
         }
     }
 
+    // apply coupons based on its product's name
     public static Coupon applyCouponsToCart(ShoppingCart shoppingCart, Scanner sc) {
         System.out.println("Enter the coupon's product:");
         String name = sc.nextLine();
@@ -400,7 +421,7 @@ public class Main {
             return shoppingCart.applyCoupon(name);
         }
     }
-
+    // apply coupons based on its product's name and product's id
     public static boolean removeCouponsFromCart(ShoppingCart shoppingCart, Scanner sc) {
         System.out.println("Enter the product that applied Coupon:");
         String name = sc.nextLine();
@@ -433,6 +454,7 @@ public class Main {
             switch (choice) {
                 // view products
                 case 1:
+                // search cart and show information
                     if (cartsManager.countCarts() != 0) {
                         cartsManager.displayCarts();
                         System.out.println();
@@ -448,6 +470,7 @@ public class Main {
 
                     break;
                 case 2:
+                // sort the carts
                     if (cartsManager.countCarts() != 0) {
                         cartsManager.displayCarts();
                     } else {
@@ -455,6 +478,7 @@ public class Main {
                     }
                     break;
                 case 3:
+                // caluclate the total price, then print it and write it into file
                     if (cartsManager.countCarts() != 0) {
                         System.out.println(cartsManager.buy());
                     } else {

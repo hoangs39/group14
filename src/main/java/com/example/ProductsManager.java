@@ -17,26 +17,21 @@ public class ProductsManager {
         this.productList = new HashSet<>();
     }
 
-    // getter
-    public HashSet<Product> getProductList() {
-        return productList;
-    }
-
     // product list functions
     public boolean addProduct(Product p) {
-        if(!productList.contains(p)){
+        if (!productList.contains(p)) {
             this.productList.add(p);
             return true;
         }
         return false;
     }
 
-    //calculate the size od the set
+    // calculate the size
     public int countProducts() {
         return this.productList.size();
     }
 
-    // remove the prodcuct in the set based on product's name
+    // remove the prodcuct in the set
     public boolean removeProduct(Product p) {
         if (this.productList.contains(p)) {
             this.productList.remove(p);
@@ -69,17 +64,23 @@ public class ProductsManager {
      * Return the sproduct with the given name
      * If no results were found -> return null
      * </p>
+     * 
      * @param searchName the search product name
      * @return product if found / null if not found
      */
     public Product getProductByName(String searchName) {
         if (productList != null) {
             for (Product product : productList) {
-                if (searchName.equals(product.getName())) return product;
+                if (searchName.equals(product.getName()))
+                    return product;
             }
         }
         return null;
     }
 
+    // getter
+    public HashSet<Product> getProductList() {
+        return productList;
+    }
 
 }

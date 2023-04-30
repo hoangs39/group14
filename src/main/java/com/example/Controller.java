@@ -11,9 +11,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Controller {
+    // the file paths
     static String fileName = "products.txt";
     static String fileName2 = "carts.txt";
 
+    // function that uses the file path from baove line then utilizes File Stream API to read data and initiate new objects
     public static ProductsManager readProductFromFile() {
         ProductsManager productsManager = new ProductsManager();
         try {
@@ -62,7 +64,7 @@ public class Controller {
                 p.setCoupon(coupon);
                 p.setCreateGift(gift);
                 productsManager.addProduct(p);
-                // String lineSkip = in.readLine();
+                
             }
             in.close();
             fileReader.close();
@@ -73,7 +75,8 @@ public class Controller {
         }
         return productsManager;
     }
-
+    // function that utilizes File Stream API 
+    // to write data of objects and convert it into lines of text in file
     public static void writeProductsToFile(HashSet<Product> store) {
         try (FileWriter fw = new FileWriter(fileName)) {
             String weight = "";
@@ -109,6 +112,8 @@ public class Controller {
         }
     }
 
+    // function that utilizes File Stream API 
+    // to write data of objects and convert it into lines of text in file
     public static void writeCartsToFile(List<ShoppingCart> shoppingCarts) {
         String couponn;
         LocalDateTime createId = LocalDateTime.now();
@@ -161,7 +166,7 @@ public class Controller {
             e.printStackTrace();
         }
     }
-
+    // function that uses the file path from baove line then utilizes File Stream API to read data and initiate new objects
     public static CartsManager createCartsObject(ProductsManager store) {
         CartsManager cartsManager = new CartsManager();
         try {
@@ -173,7 +178,7 @@ public class Controller {
             while ((line = in.readLine()) != null) {
                 String[] elements = line.split(",");
                 String cartId = elements[0];
-                // System.out.println(elements[4]);
+                
                 String couponName = "";
                 if (!elements[3].equals("x-x-0.00000")) {
                     String[] couponInfos = elements[3].split("-");
@@ -181,11 +186,11 @@ public class Controller {
                 }
 
                 sc = new ShoppingCart(cartId, store);
-                // System.out.println(sc);
+                
                 String line2 = in.readLine();
                 String[] len = line2.split(":");
                 int length = Integer.parseInt(len[1]);
-                // System.out.println(length);
+                
 
                 String line3 = in.readLine();
                 String productsLines;
@@ -196,7 +201,7 @@ public class Controller {
                     String name = pInfos[1];
                     String description = pInfos[2];
                     int quantity = Integer.parseInt(pInfos[3]);
-                    // System.out.println(quantity);
+                    
                     double price = Double.parseDouble(pInfos[4]);
                     double weight;
                     if (type.equals("physical")) {
@@ -224,15 +229,15 @@ public class Controller {
                         p.setMessage(message);
                         p.setCoupon(coupon);
                     }
-                    // System.out.println(p);
+                    
                     for (int i = 0; i < quantity; i++) {
-                        // System.out.println(i);
+                        
                         sc.addItem(p);
-                        // System.out.println("hi");
+                        
                     }
 
                 }
-                // System.out.println(couponName);
+
                 if(!couponName.equals("")){
                     sc.applyCoupon(couponName);
                 }
