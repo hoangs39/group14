@@ -119,6 +119,8 @@ public class Loader {
                 if (product instanceof PhysicalProducts) {
                     PhysicalProducts phy = (PhysicalProducts) product;
                     weight = String.format("%.5f", phy.getWeight());
+                }else {
+                    weight = "";
                 }
 
                 Coupon coupon = product.getCoupon();
@@ -183,6 +185,8 @@ public class Loader {
                     if (p instanceof PhysicalProducts) {
                         PhysicalProducts phy = (PhysicalProducts) p;
                         weight = String.format("%.5f", phy.getWeight());
+                    }else{
+                        weight = "";
                     }
                     // System.out.println(p);
                     Coupon c = p.getCoupon();
