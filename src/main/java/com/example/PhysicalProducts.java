@@ -1,5 +1,7 @@
 package com.example;
-
+/**
+ * @author Group14
+ */
 /**
  * A specific class that manage the weight attribute.
  */

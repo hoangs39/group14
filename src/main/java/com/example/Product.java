@@ -1,5 +1,7 @@
 package com.example;
-
+/**
+ * @author Group14
+ */
 public abstract class Product implements Gift<Product>,Tax{
     /**
      * Product attributes

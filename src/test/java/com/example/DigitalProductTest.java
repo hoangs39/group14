@@ -1,7 +1,9 @@
 package com.example;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * @author Group14
+ */
 public class DigitalProductTest {
     @Test
     void testGetDisplayInfo() {

@@ -1,7 +1,9 @@
 package com.example;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * @author Group14
+ */
 public class CartsManagerTest {
     @Test
     void testAddCart() {
@@ -82,6 +84,7 @@ public class CartsManagerTest {
         cm.addCart(c1);
         cm.addCart(c2);
         cm.removeItemInCart(p1);
+        // check if p1 is still avaiable in cart or not?
         assertTrue(c1.searchItem(p1.getName(),1) == null);
         assertTrue(c1.searchItem(p1.getName(),2) == null);
         assertTrue(c1.getCountItems().get(p1.getName()) == null);
@@ -105,6 +108,7 @@ public class CartsManagerTest {
         cm.addCart(c1);
         cm.addCart(c2);
         cm.speedUpShipping();
+        // check the accuracy of alogrithms based on the order of the carts list
         assertTrue(cm.getShoppingCarts().get(0).equals(c2));
     }
 }

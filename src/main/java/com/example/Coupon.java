@@ -1,5 +1,7 @@
 package com.example;
-
+/**
+ * @author Group14
+ */
 public class Coupon {
     //Coupon's attributes
     private String product;
