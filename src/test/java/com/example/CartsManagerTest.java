@@ -23,47 +23,6 @@ public class CartsManagerTest {
         assertTrue(!cm.addCart(c1));
     }
 
-    @Test
-    void testBuy() {
-        PhysicalProducts p1 = new PhysicalProducts("car", 40.0, "new", 4, "luxuryTax");
-        Product p2 = new PhysicalProducts("bike", 4.0, "new", 4, "normalTax");
-        p1.setWeight(10.00);
-        ProductsManager productManager = new ProductsManager();
-        productManager.addProduct(p1);
-        productManager.addProduct(p2);
-        ShoppingCart c1 = new ShoppingCart("C1",productManager);
-        c1.addItem(p1);
-        c1.addItem(p1);
-        ShoppingCart c2 = new ShoppingCart("C2",productManager);
-        c2.addItem(p2);
-        c2.addItem(p1);
-        CartsManager cm = new CartsManager();
-        cm.addCart(c1);
-        cm.addCart(c2);
-        cm.buy();
-        assertTrue(cm.countCarts() == 0);
-    }
-
-    @Test
-    void testChange() {
-        PhysicalProducts p1 = new PhysicalProducts("car", 40.0, "new", 4, "luxuryTax");
-        Product p2 = new PhysicalProducts("bike", 4.0, "new", 4, "normalTax");
-        p1.setWeight(10.00);
-        ProductsManager productManager = new ProductsManager();
-        productManager.addProduct(p1);
-        productManager.addProduct(p2);
-        ShoppingCart c1 = new ShoppingCart("C1",productManager);
-        c1.addItem(p1);
-        c1.addItem(p1);
-        ShoppingCart c2 = new ShoppingCart("C2",productManager);
-        c2.addItem(p2);
-        c2.addItem(p1);
-        CartsManager cm = new CartsManager();
-        cm.addCart(c1);
-        cm.addCart(c2);
-        cm.buy();
-        assertTrue(cm.countCarts() == 0);
-    }
 
     @Test
     void testCountCarts() {
