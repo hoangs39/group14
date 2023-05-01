@@ -94,33 +94,36 @@ public class ShoppingCart {
      * add item to item list
      * 
      * @param p the product name used for adding
-     * <p>
-     * add product to items map
-     * then add coupon to copouns list if product has a copoun
-     * and substract the quantity of product in the product list
-     * then start to count the number of product
-     * </p>
+     *          <p>
+     *          add product to items map
+     *          then add coupon to copouns list if product has a copoun
+     *          and substract the quantity of product in the product list
+     *          then start to count the number of product
+     *          </p>
      * @return boolean true if success / false if not work
      */
     public boolean addItem(Product p) {
         Product product = store.getProductByName(p.getName());
         // create a single product that can be modified its msg indepently
         // to others product with the same name in the Product manager
-        Product item = createItem(product);
-        item.setCreateGift(product.getCreateGift());
-        // System.out.println(item);
-        // System.out.println(product.getAvailableQuantity());
-        if (product.getAvailableQuantity() != 0) {
-            itemsList.put(Integer.valueOf(itemId++), item);
-            product.decreaseQuantity(1);
-            countTheNumberOfItems(item.getName());
+        if (product != null) {
+            Product item = createItem(product);
+            item.setCreateGift(product.getCreateGift());
+            item.setCoupon(product.getCoupon());
             // System.out.println(item);
-            if (product.getCoupon() != null) {
-                Coupon coupon = product.getCoupon();
-                coupons.add(coupon);
+            // System.out.println(product.getAvailableQuantity());
+            if (product.getAvailableQuantity() != 0) {
+                itemsList.put(Integer.valueOf(itemId++), item);
+                product.decreaseQuantity(1);
+                countTheNumberOfItems(item.getName());
+                // System.out.println(item);
+                if (product.getCoupon() != null) {
+                    Coupon coupon = product.getCoupon();
+                    coupons.add(coupon);
+                }
+                cartAmount();
+                return true;
             }
-            cartAmount();
-            return true;
         }
         return false;
     }
@@ -138,12 +141,12 @@ public class ShoppingCart {
      * create an unique item
      * 
      * @param p the product that used for create item
-     *  <p>
-     *  create an unique Product item in cart
-     *  that takes data from the product in the product manager,
-     *  where just only store the data of products with same name, not a
-     *  single unique product
-     *  </p>
+     *          <p>
+     *          create an unique Product item in cart
+     *          that takes data from the product in the product manager,
+     *          where just only store the data of products with same name, not a
+     *          single unique product
+     *          </p>
      * @return Product item that is unique
      */
     private Product createItem(Product p) {
@@ -170,12 +173,12 @@ public class ShoppingCart {
      * 
      * @param p  the product name used for removing
      * @param id the id of a specific item
-     * <p>
-     * remove product from items map based on its name and id
-     * then add the quatity of the product
-     * and remove coupon to copouns list,
-     * if there are no left coressponding product in the list
-     * </p>
+     *           <p>
+     *           remove product from items map based on its name and id
+     *           then add the quatity of the product
+     *           and remove coupon to copouns list,
+     *           if there are no left coressponding product in the list
+     *           </p>
      * @return boolean true if success / false if not work
      */
     public boolean removeItemById(int id) {
@@ -207,11 +210,11 @@ public class ShoppingCart {
      * remove items in item list
      * 
      * @param p the product name used for removing
-     * <p>
-     * remove products from items map
-     * then add the quatity of the product
-     * and remove coupon to copouns list
-     * </p>
+     *          <p>
+     *          remove products from items map
+     *          then add the quatity of the product
+     *          and remove coupon to copouns list
+     *          </p>
      * @return boolean true if success / false if not work
      */
 
@@ -265,7 +268,7 @@ public class ShoppingCart {
      * 
      * @param p       the product name used for searching
      * @param message the new message of the Product item
-     * @param id id of the product
+     * @param id      id of the product
      * @return boolean if found / null if not found
      */
     public boolean addMessage(String p, int id, String message) {
@@ -347,11 +350,11 @@ public class ShoppingCart {
      * assign the Coupon based on the name
      * 
      * @param p Product that might be inside the cart
-     * <p>
-     * if there is any the coupon that has the product name in the coupons
-     * list
-     * then assign it to appiled coupon and re-calculate the price
-     * </p>
+     *          <p>
+     *          if there is any the coupon that has the product name in the coupons
+     *          list
+     *          then assign it to appiled coupon and re-calculate the price
+     *          </p>
      * @return applied copoun
      */
     public Coupon applyCoupon(String p) {

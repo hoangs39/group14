@@ -83,6 +83,7 @@ public class Loader {
                 String productsLines;
                 for (int index = 0; index < length; index++) {
                     productsLines = in.readLine();
+                    // System.out.println(productsLines);
                     Product p = createProduct(productsLines, "cart");
                     sc.addItem(p);
                     // System.out.println(sc.addItem(p));
@@ -165,7 +166,6 @@ public class Loader {
                     couponn = String.format("%s-%s-%.5f", "x", "x",
                             0.0);
                 }
-                System.out.println(couponn);
                 fw.write(cart.getCartId() + "," + cart.getTotalWeight() + "," + cart.getTotalPrice() + "," + couponn
                         + "," + createId.format(myFormatObj).toString() + "\n");
                 fw.write("Products:" + cart.countItem() + "\n");
@@ -173,13 +173,18 @@ public class Loader {
                 String weight = "";
                 String cp;
                 Collection<Product> items = cart.getItemsList().values();
-                // System.out.println(items);
+
+                // System.out.println(cart.getItemsList().get(1).getCoupon());
+                // System.out.println(cart.getItemsList().get(2).getCoupon());
+
                 for (Product p : items) {
                     if (p instanceof PhysicalProducts) {
                         PhysicalProducts phy = (PhysicalProducts) p;
                         weight = String.format("%.5f", phy.getWeight());
                     }
+                    // System.out.println(p);
                     Coupon c = p.getCoupon();
+                    // System.out.println(c);
                     if (c != null) {
                         cp = String.format("%s-%s-%.5f", coupon.getType(), coupon.getProduct(),
                                 coupon.getValue());
@@ -253,6 +258,7 @@ public class Loader {
             p.setMessage(message);
         }
         p.setCoupon(coupon);
+        // System.out.println(p.getCoupon());
         return p;
     }
 }
