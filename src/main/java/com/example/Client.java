@@ -1,7 +1,11 @@
 package com.example;
 
 import java.util.Scanner;
-
+/**
+ * <p>
+ * The class functions as the executor that uses all view , model and controller classes.
+ * </p>
+ */
 public class Client {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);

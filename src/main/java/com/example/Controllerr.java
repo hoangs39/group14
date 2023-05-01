@@ -1,7 +1,5 @@
 package com.example;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.List;
@@ -16,8 +14,12 @@ public class Controllerr {
         this.storeModel = productsManager;
         this.view = view;
     }
-    
 
+    /**
+     * <p>
+     * works as a menu form to receive the users'input data.
+     * </p>
+     */
     public void menu(Scanner sc) {
         String options = "";
         List<String> menuTitle = view.title();
@@ -27,58 +29,66 @@ public class Controllerr {
             System.out.println("Pls enter choice");
             options = sc.nextLine();
             if (!options.equals("Exit")) {
-                List <String> submenu = menu.get(options);
-                if(submenu != null){
+                List<String> submenu = menu.get(options);
+                if (submenu != null) {
                     subMenu(options, menu.get(options), sc);
-                }else{
+                } else {
                     System.out.println("There is an error!");
-                }    
+                }
             }
-        } while(!options.equals("Exit"));
+        } while (!options.equals("Exit"));
         Loader.writeProductsIntoFile(storeModel.getProductList());
         return;
     }
 
-    public void subMenu(String option, List<String> submenu,Scanner sc){
+        /**
+     * <p>
+     * works as a submenu form to receive the users'input data.
+     * </p>
+     */
+    public void subMenu(String option, List<String> submenu, Scanner sc) {
         String choices = "";
-        do{
+        do {
             view.subMenuForm(submenu, sc);
             System.out.println("Pls choose a option:");
             choices = sc.nextLine();
-            if(!choices.equals("Exit")){
-                if(option.equals("cartlist")){
+            if (!choices.equals("Exit")) {
+                if (option.equals("cartlist")) {
                     handleCartsList(sc, choices);
-                }else if(option.equals("product")){
+                } else if (option.equals("product")) {
                     view.displayProductInStore(storeModel);
-                    if(!choices.equals("viewP")){
+                    if (!choices.equals("viewP")) {
                         handleProduct(sc, choices);
                     }
-                }else{
+                } else {
                     view.displayCarts(cartsModel);
                     System.out.println("Enter cart Id");
                     String id = sc.nextLine();
                     ShoppingCart shoppingCart = cartsModel.getCartById(id);
-                    if(option.equals("gift")){
+                    if (option.equals("gift")) {
                         view.displayCart(shoppingCart);
                         handleGift(shoppingCart, sc, choices);
-                    }else if(option.equals("coupon")){
+                    } else if (option.equals("coupon")) {
                         view.displayCart(shoppingCart);
-                        if(view.displayCoupons(shoppingCart)){
+                        if (view.displayCoupons(shoppingCart)) {
                             view.displayAppliedCoupons(shoppingCart);
                             handleCoupons(shoppingCart, sc, choices);
                         }
-                    }else{
+                    } else {
                         view.displayCart(shoppingCart);
-                        if(!handleCart(shoppingCart, sc, choices)){
+                        if (!handleCart(shoppingCart, sc, choices)) {
                             System.out.println("Unsuccess");
                         }
                     }
                 }
             }
-        } while(!choices.equals("Exit"));
+        } while (!choices.equals("Exit"));
     }
-
-    // create items and then add it to new ProductManager object for later usage
+    /**
+     * <p>
+     *create , edit, view product items based on input order
+     * </p>
+     */
     public boolean handleProduct(Scanner sc, String choice) {
         Product p;
         System.out.println("Please enter type you want for the item (PHYSICAL or DIGITAL):");
@@ -102,7 +112,7 @@ public class Controllerr {
 
         if (choice.equalsIgnoreCase("edit")) {
             p = storeModel.getProductByName(name);
-            if(p != null){
+            if (p != null) {
                 p.setDescription(description);
                 p.setPrice(price);
                 p.setAvailableQuantity(quantity);
@@ -146,9 +156,13 @@ public class Controllerr {
             return storeModel.addProduct(p);
         }
     }
-
+    /**
+     * <p>
+     *add , remove 1, remove many product items based on input order
+     * </p>
+     */
     public boolean handleCart(ShoppingCart shoppingCart, Scanner sc, String choices) {
-        if(choices.equalsIgnoreCase("add")){
+        if (choices.equalsIgnoreCase("add")) {
             System.out.println("--------------------------\n");
             storeModel.getAllProducts();
         }
@@ -165,7 +179,11 @@ public class Controllerr {
             return shoppingCart.removeItemById(id);
         }
     }
-
+    /**
+     * <p>
+     *add , view product items' message based on input order
+     * </p>
+     */
     public boolean handleGift(ShoppingCart shoppingCart, Scanner sc, String choices) {
         System.out.println("Enter the Id:");
         int id = Integer.parseInt(sc.nextLine());
@@ -181,6 +199,11 @@ public class Controllerr {
         }
     }
 
+       /**
+     * <p>
+     *apply , remove product items' coupons based on input order
+     * </p>
+     */
     public Coupon handleCoupons(ShoppingCart shoppingCart, Scanner sc, String choices) {
         System.out.println("\nEnter the coupon's product:");
         String name = sc.nextLine();
@@ -196,13 +219,17 @@ public class Controllerr {
             System.out.println("Enter the Id:");
             int id = Integer.parseInt(sc.nextLine());
             Product p = shoppingCart.searchItem(name, id);
-            if(!shoppingCart.removeCoupon(p.getName())){
+            if (!shoppingCart.removeCoupon(p.getName())) {
                 System.out.println("Unsuccessfully");
             }
             return null;
         }
     }
-
+    /**
+     * <p>
+     *view cart's detailed information , buy and print reciept of carts list, sort carts list in increasing order based on input order
+     * </p>
+     */
     public void handleCartsList(Scanner sc, String choices) {
         if (cartsModel.countCarts() != 0) {
             cartsModel.displayCarts();

@@ -9,14 +9,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Scanner;
 
 public class Loader {
-
 
     static String fileName = "products.txt";
     static String fileName2 = "carts.txt";
 
+    /**
+     * <p>
+     * read the products.txt file then initiate a new product manager model object,
+     * which contains products
+     * </p>
+     */
     public static ProductsManager retriveProductFromDatabase(String file) {
         ProductsManager productsManager = new ProductsManager();
         try {
@@ -38,6 +42,12 @@ public class Loader {
         return productsManager;
     }
 
+    /**
+     * <p>
+     * read the carts.txt file then initiate a new cart manager model object,
+     * which contains carts and products
+     * </p>
+     */
     public static CartsManager retriveCartsFromDatabase(ProductsManager store, String file) {
         CartsManager cartsManager = new CartsManager();
         try {
@@ -90,8 +100,12 @@ public class Loader {
         return cartsManager;
     }
 
-    // function that utilizes File Stream API
-    // to write data of objects and convert it into lines of text in file
+    /**
+     * <p>
+     * function that utilizes File Stream API
+     * to write data of objects and convert it into lines of text in file
+     * </p>
+     */
     public static void writeProductsIntoFile(HashSet<Product> store) {
         try (FileWriter fw = new FileWriter(fileName)) {
             String weight = "";
@@ -127,8 +141,12 @@ public class Loader {
         }
     }
 
-    // function that utilizes File Stream API
-    // to write data of objects and convert it into lines of text in file
+    /**
+     * <p>
+     * function that utilizes File Stream API
+     * to write data of objects and convert it into lines of text in file
+     * </p>
+     */
     public static void writeCartsIntoFile(List<ShoppingCart> shoppingCarts) {
         String couponn;
         LocalDateTime createId = LocalDateTime.now();
@@ -183,6 +201,11 @@ public class Loader {
         }
     }
 
+    /**
+     * <p>
+     * create Product object based on all information stored in files
+     * </p>
+     */
     public static Product createProduct(String line, String choices) {
         String[] pInfos = line.split(",");
         String type = pInfos[0];

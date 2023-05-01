@@ -7,52 +7,99 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
+/**
+ * <p>
+ * The class functions as the UI handler in this system
+ * </p>
+ */
 public class View {
 
+    /**
+     * <p>
+     * disply the menu
+     * </p>
+     */
     public void menuForm(List<String> titles, Scanner sc) {
         Stream<String> menuTitles = titles.stream();
         menuTitles.forEach(m -> System.out.println("+ " + m + "\n"));
     }
 
+    /**
+     * <p>
+     * disply the submenu
+     * </p>
+     */
     public void subMenuForm(List<String> submenu, Scanner sc) {
         Stream<String> subMenuTitles = submenu.stream();
         subMenuTitles.forEach(m -> System.out.println("+ " + m + "\n"));
     }
 
+    /**
+     * <p>
+     * display all the carts
+     * </p>
+     */
     public void displayCarts(CartsManager cartsManager) {
         cartsManager.displayCarts();
     }
 
+    /**
+     * <p>
+     * display the single cart
+     * </p>
+     */
     public void displayCart(ShoppingCart shoppingCart) {
         System.out.println(shoppingCart.toString());
         shoppingCart.printItemsList();
     }
 
-    public boolean displayCoupons(ShoppingCart shoppingCart){
-        if(!shoppingCart.getCoupons().isEmpty()){
+    /**
+     * <p>
+     * display the coupons
+     * </p>
+     */
+    public boolean displayCoupons(ShoppingCart shoppingCart) {
+        if (!shoppingCart.getCoupons().isEmpty()) {
             shoppingCart.displayAllCoupons();
             return true;
-        }else{
+        } else {
             System.out.println("This Coupons List is empty!");
             return false;
         }
     }
-    public void displayAppliedCoupons(ShoppingCart shoppingCart){
+
+    /**
+     * <p>
+     * display the applied of a cart
+     * </p>
+     */
+    public void displayAppliedCoupons(ShoppingCart shoppingCart) {
         Coupon c = shoppingCart.getAppliedCoupon();
-        if(c != null){
+        if (c != null) {
             System.out.printf("Applied Coupons: %s, Type: %s, Value: %.2f", c.getProduct(), c.getType(), c.getValue());
-        }else{
+        } else {
             System.out.println("There is no applied coupon!");
         }
     }
 
-    public void displayProductInStore(ProductsManager store){
+    /**
+     * <p>
+     * display the products in the product list
+     * </p>
+     */
+    public void displayProductInStore(ProductsManager store) {
         store.getAllProducts();
     }
 
-    public Map<String, List<String>> generateMenu(){
+    /**
+     * <p>
+     * generate the map ofstirng and list of String for storing menu's key and
+     * submenu's contents
+     * </p>
+     */
+    public Map<String, List<String>> generateMenu() {
         Map<String, List<String>> menu = new HashMap<>();
-        
+
         List<String> products = new ArrayList<>();
         products.add("View Products -> Enter: viewP");
         products.add("Create New Product -> Enter: create");
@@ -87,7 +134,13 @@ public class View {
 
         return menu;
     }
-    public List<String> title(){
+
+    /**
+     * <p>
+     * store the title of the menu
+     * </p>
+     */
+    public List<String> title() {
         List<String> menu = new ArrayList<>();
         menu.add("Handle Product -> Enter: product");
         menu.add("Handle Cart -> Enter: cart");
