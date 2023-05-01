@@ -6,7 +6,7 @@ DIGITAL,bitcoin,new,1,200.0,,notSupport!,x-x-0.00000,luxuryTax
 C3,2.0,18.2,price-fan-2.00000,010523110515
 Products:1
 Type,Name,Description,Quantity,Price,Weight,Gift,Coupon,TaxType
-PHYSICAL,fan,light,1,20.0,2.00000,notSupport!,x-x-0.00000,freeTax
+PHYSICAL,fan,light,1,20.0,2.00000,notSupport!,price-fan-2.00000,freeTax
 C2,1000.0,43290.0,percent-car-10.00000,260423115151
 Products:1
 Type,Name,Description,Quantity,Price,Weight,Gift,Coupon,TaxType
@@ -14,10 +14,10 @@ PHYSICAL,car,new,1,40000.0,1000.00000,notSupport!,percent-car-10.00000,luxuryTax
 C4,2.0,11.2,price-meat-1.00000,010523110515
 Products:2
 Type,Name,Description,Quantity,Price,Weight,Gift,Coupon,TaxType
-PHYSICAL,meat,fresh,1,10.0,1.00000,notSupport!,x-x-0.00000,freeTax
+PHYSICAL,meat,fresh,1,10.0,1.00000,notSupport!,price-meat-1.00000,freeTax
 PHYSICAL,milk,delicious,1,2.0,1.00000,notSupport!,x-x-0.00000,freeTax
 C5,5.0,1683.35,percent-screen-30.00000,010523110515
 Products:2
 Type,Name,Description,Quantity,Price,Weight,Gift,Coupon,TaxType
 DIGITAL,podcast,new,1,3.0,,notSupport!,x-x-0.00000,freeTax
-PHYSICAL,screen,8k,1,2000.0,5.00000,Empty!,x-x-0.00000,luxuryTax
+PHYSICAL,screen,8k,1,2000.0,5.00000,Empty!,percent-screen-30.00000,luxuryTax
