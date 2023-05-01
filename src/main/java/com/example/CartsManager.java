@@ -84,12 +84,14 @@ public class CartsManager {
     public String buy(){
         double payment = 0.0;
         for (ShoppingCart shoppingCart : shoppingCarts) {
+            System.out.println("-----------------------");
             System.out.println(shoppingCart.toString());
             shoppingCart.printItemsList();
             payment += shoppingCart.getTotalPrice();
         }
         String noti = String.format("You have done your shopping and this is you bill: %.2f", payment);
-        Controller.writeCartsToFile(shoppingCarts);
+        // Controller.writeCartsToFile(shoppingCarts);
+        Loader.writeCartsIntoFile(shoppingCarts);
         shoppingCarts.removeAll(shoppingCarts);
         return noti;
     }

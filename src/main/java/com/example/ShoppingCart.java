@@ -108,6 +108,8 @@ public class ShoppingCart {
         // to others product with the same name in the Product manager
         Product item = createItem(product);
         item.setCreateGift(product.getCreateGift());
+        // System.out.println(item);
+        // System.out.println(product.getAvailableQuantity());
         if (product.getAvailableQuantity() != 0) {
             itemsList.put(Integer.valueOf(itemId++), item);
             product.decreaseQuantity(1);
@@ -272,6 +274,7 @@ public class ShoppingCart {
             product.setMessage(message);
             return true;
         }
+        System.out.println("Product is not supported for gift");
         return false;
     }
 
@@ -313,20 +316,23 @@ public class ShoppingCart {
                 Map.Entry<Integer, Product> entry = iterator.next();
                 Product product = entry.getValue();
                 productPrice = product.getPrice() + product.getTaxAmount();
+                double productWeight = 0.00;
                 if (product instanceof PhysicalProducts) {
                     PhysicalProducts phy = (PhysicalProducts) product;
                     totalWeight += phy.getWeight();
+                    productWeight += phy.getWeight();
                 }
+                productPrice += (productWeight * BASE_FEE);
                 if (this.appliedCoupon != null && this.appliedCoupon.getProduct().equals(product.getName())) {
                     if (this.appliedCoupon.getType().equals("percent")) {
-                        productPrice *= (1 - (appliedCoupon.getValue() / 100));
+                        productPrice *= ((100 - appliedCoupon.getValue()) / 100);
+                        // System.out.println(productPrice);
                     } else if (this.appliedCoupon.getType().equals("price")) {
                         productPrice -= this.appliedCoupon.getValue();
                     }
                 }
                 totalPrice += productPrice;
             }
-            totalPrice += (totalWeight * BASE_FEE);
         }
         return totalPrice;
     }
