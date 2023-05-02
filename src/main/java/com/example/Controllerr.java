@@ -117,6 +117,12 @@ public class Controllerr {
             if (p != null) {
                 p.setDescription(description);
                 p.setPrice(price);
+                if(p.getCoupon().getType().equals("price")){
+                    if(p.getCoupon().getValue() > price){
+                        System.out.println("Current Coupon value is greater than the price -> the program will automatically delete its coupon!");
+                        p.setCoupon(null);
+                    }
+                }
                 p.setAvailableQuantity(quantity);
                 if (p instanceof PhysicalProducts) {
                     System.out.println("Please enter weight of the item:");
@@ -145,7 +151,7 @@ public class Controllerr {
             if (c.equalsIgnoreCase("Y")) {
                 System.out.println("What type of coupon? (percent or price)");
                 String cType = sc.nextLine();
-                System.out.println("What value of coupon? (0-100% or 0-...)");
+                System.out.println(String.format("What value of coupon? (percent: 0-100 or price value: 0- %,.2f)",price));
                 double cVal = Double.parseDouble(sc.nextLine());
                 Coupon coupon = new Coupon(p.getName(), cType, cVal);
                 p.setCoupon(coupon);
