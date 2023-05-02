@@ -31,7 +31,7 @@ public class Loader {
             in.readLine();
             String line;
             while ((line = in.readLine()) != null) {
-                // System.out.println(line);
+                
                 Product p = createProduct(line, "product");
                 productsManager.addProduct(p);
             }
@@ -72,24 +72,20 @@ public class Loader {
                     couponName = couponInfos[1];
                     couponType = couponInfos[0];
                     couponValue = Double.parseDouble(couponInfos[2]);
-                    // System.out.println(couponName);
-                    // System.out.println(couponValue);
-                    // System.out.println(couponType);
                     cartAppliedCoupon = new Coupon(couponName, couponType, couponValue);
                 }
                 sc = new ShoppingCart(cartId, store);
                 String line2 = in.readLine();
                 String[] len = line2.split(":");
                 int length = Integer.parseInt(len[1]);
-                // System.out.println(length);
                 String line3 = in.readLine();
                 String productsLines;
                 for (int index = 0; index < length; index++) {
                     productsLines = in.readLine();
-                    // System.out.println(productsLines);
+                    
                     Product p = createProduct(productsLines, "cart");
                     sc.addItem(p);
-                    // System.out.println(sc.addItem(p));
+                    
                 }
                 sc.setAppliedCoupon(cartAppliedCoupon);
                 cartsManager.addCart(sc);
@@ -179,8 +175,8 @@ public class Loader {
                 String cp;
                 Collection<Product> items = cart.getItemsList().values();
 
-                // System.out.println(cart.getItemsList().get(1).getCoupon());
-                // System.out.println(cart.getItemsList().get(2).getCoupon());
+                
+                
 
                 for (Product p : items) {
                     if (p instanceof PhysicalProducts) {
@@ -189,9 +185,9 @@ public class Loader {
                     }else{
                         weight = "";
                     }
-                    // System.out.println(p);
+                    
                     Coupon c = p.getCoupon();
-                    // System.out.println(c);
+                    
                     if (c != null) {
                         cp = String.format("%s-%s-%.5f", c.getType(), c.getProduct(),
                                 c.getValue());
@@ -221,16 +217,16 @@ public class Loader {
     public static Product createProduct(String line, String choices) {
         String[] pInfos = line.split(",");
         String type = pInfos[0];
-        // System.out.println(type.equalsIgnoreCase("PHYSICAL"));
+        
         String name = pInfos[1];
         String description = pInfos[2];
         int quantity = Integer.parseInt(pInfos[3]);
         double price = Double.parseDouble(pInfos[4]);
         double weight;
-        // System.out.println(pInfos[5]);
+        
         if (type.equalsIgnoreCase("PHYSICAL")) {
-            // System.out.println(pInfos[5]);
-            // System.out.println("i");
+            
+            
             weight = Double.parseDouble(pInfos[5]);
         } else {
             weight = 0;
@@ -245,7 +241,7 @@ public class Loader {
             double cPrice = Double.parseDouble(cInfos[2]);
             coupon = new Coupon(cName, cType, cPrice);
         }
-        // System.out.println(coupon);
+        
         String taxType = pInfos[8];
         Product p;
         if (weight != 0) {
@@ -265,7 +261,7 @@ public class Loader {
             p.setMessage(message);
         }
         p.setCoupon(coupon);
-        // System.out.println(p.getCoupon());
+        
         return p;
     }
 }

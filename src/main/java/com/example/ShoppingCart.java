@@ -113,13 +113,13 @@ public class ShoppingCart {
             Product item = createItem(product);
             item.setCreateGift(product.getCreateGift());
             item.setCoupon(product.getCoupon());
-            // System.out.println(item);
-            // System.out.println(product.getAvailableQuantity());
+            
+            
             if (product.getAvailableQuantity() != 0) {
                 itemsList.put(Integer.valueOf(itemId++), item);
                 product.decreaseQuantity(1);
                 countTheNumberOfItems(item.getName());
-                // System.out.println(item);
+                
                 if (product.getCoupon() != null) {
                     Coupon coupon = product.getCoupon();
                     coupons.add(coupon);

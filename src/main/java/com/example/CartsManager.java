@@ -94,7 +94,6 @@ public class CartsManager {
             payment += shoppingCart.getTotalPrice();
         }
         String noti = String.format("You have done your shopping and this is you bill: %.2f", payment);
-        // Controller.writeCartsToFile(shoppingCarts);
         Loader.writeCartsIntoFile(shoppingCarts);
         shoppingCarts.removeAll(shoppingCarts);
         return noti;
