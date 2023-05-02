@@ -31,6 +31,7 @@ public class Loader {
             in.readLine();
             String line;
             while ((line = in.readLine()) != null) {
+                // System.out.println(line);
                 Product p = createProduct(line, "product");
                 productsManager.addProduct(p);
             }
@@ -192,8 +193,8 @@ public class Loader {
                     Coupon c = p.getCoupon();
                     // System.out.println(c);
                     if (c != null) {
-                        cp = String.format("%s-%s-%.5f", coupon.getType(), coupon.getProduct(),
-                                coupon.getValue());
+                        cp = String.format("%s-%s-%.5f", c.getType(), c.getProduct(),
+                                c.getValue());
                     } else {
                         cp = String.format("%s-%s-%.5f", "x", "x",
                                 0.0);

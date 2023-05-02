@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ShoppingCart {
+
     // list of product name inside the cart
     private Map<Integer, Product> itemsList;
     private Map<String, Integer> countItems;
@@ -455,6 +456,9 @@ public class ShoppingCart {
 
     public Map<String, Integer> getCountItems() {
         return countItems;
+    }
+    public double getBASE_FEE() {
+        return BASE_FEE;
     }
 
 }

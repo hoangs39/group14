@@ -89,6 +89,7 @@ public class CartsManager {
         for (ShoppingCart shoppingCart : shoppingCarts) {
             System.out.println("-----------------------");
             System.out.println(shoppingCart.toString());
+            System.out.println("The shipping fee: " + (shoppingCart.getTotalWeight() * shoppingCart.getBASE_FEE()));
             shoppingCart.printItemsList();
             payment += shoppingCart.getTotalPrice();
         }
