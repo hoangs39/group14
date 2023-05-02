@@ -312,7 +312,8 @@ public class ShoppingCartTest {
         ShoppingCart c1 = new ShoppingCart("C1",productManager);
         assertTrue(c1.toString().equals("Cart C1: There are no products in this cart!"));
     }
-
+    
+    @Test
     void testToString() {
         PhysicalProducts p1 = new PhysicalProducts("car", 40.0, "new", 4, "luxuryTax");
         p1.setWeight(10.000);
