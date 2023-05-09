@@ -18,13 +18,15 @@ public class ShoppingCartTest {
     c1.addItem(p1);
     c1.addItem(p1);
     c1.addItem(p2);
-    //check qunatity of the item in the cart
+    //check qunatity of the item in the cart after having added 3 products with 2 items are simillar.
     assertTrue(c1.countItem() == 3);
-    // check name
+    // check equality of the searched product and the input product
+    // they must be the same because they have the same name and the equal function is modified 
+    // to accepts that 2 products having the same name are equal.
     assertTrue(c1.searchItem(p1.getName(),1).equals(p1));
-    // check quantiy of products inside cart
+    // check the quantiy of products inside cart after having added products to cart
     assertTrue(c1.getCountItems().get(p1.getName()) == 2);
-    //check qunatity of the item is product list
+    //check the quantity of the item is product manager after having added products to cart
     assertTrue(p1.getAvailableQuantity() == 2);
     }
 
@@ -37,7 +39,7 @@ public class ShoppingCartTest {
         productManager.addProduct(p2);
         ShoppingCart c1 = new ShoppingCart("C1",productManager);
         c1.addItem(p1);
-        // check the msg received when the gift feature is not enabled
+        // check the msg received when the gift feature of the added product is not enabled
         c1.addMessage(p1.getName(),1, "hi");
         assertTrue(c1.searchItem(p1.getName(),1).getMessage().equals("notSupport!"));
     }
@@ -51,7 +53,7 @@ public class ShoppingCartTest {
         productManager.addProduct(p2);
         ShoppingCart c1 = new ShoppingCart("C1",productManager);
         c1.addItem(p1);
-        // enable gift feature but not add msg
+        // check what would happen when enabling gift feature but not adding any msg to the product
         assertTrue(c1.searchItem(p1.getName(),1).getMessage().equals("Empty!"));
     }
 
@@ -66,7 +68,7 @@ public class ShoppingCartTest {
         ShoppingCart c1 = new ShoppingCart("C1",productManager);
         c1.addItem(p1);
         c1.addMessage(p1.getName(),1, "Hello");
-        //check msg
+        //check output msg after having updated msg and enabled gift feature.
         assertTrue(c1.searchItem(p1.getName(),1).getMessage().equals("Hello"));
     }
 
@@ -84,7 +86,7 @@ public class ShoppingCartTest {
         c1.addItem(p1);
         c1.addItem(p2);
         c1.applyCoupon(p2.getName());
-        // check price after applying coupon
+        // check price after haivng applied coupon
         assertTrue(c1.cartAmount() == 42.4000);
     }
 
@@ -105,7 +107,7 @@ public class ShoppingCartTest {
         c1.addItem(p2);
         c1.applyCoupon(p2.getName());
         c1.applyCoupon(p1.getName());
-        //check price of cart after applying 2 coupons
+        //check price of cart after having applied 2 coupons
         assertTrue(c1.cartAmount() == 47.6000);
     }
 
@@ -122,7 +124,7 @@ public class ShoppingCartTest {
         ShoppingCart c1 = new ShoppingCart("C1",productManager);
         c1.addItem(p1);
         c1.addItem(p2);
-        //check the accuracy of the price
+        //check the accuracy of the price calculation algorithm
         assertTrue(c1.cartAmount() == 53.400);
     }
 
@@ -140,7 +142,7 @@ public class ShoppingCartTest {
         c1.addItem(p2);
         p2.setPrice(1);
         c1.changeItemAll(p2);
-        //check the accuracy of the price after changed data
+        //check the accuracy of the price after having changed price data of a product in the product manager's collection
         assertTrue(c1.cartAmount() == 51.100);
     }
 
@@ -153,11 +155,10 @@ public class ShoppingCartTest {
         ProductsManager productManager = new ProductsManager();
         productManager.addProduct(p1);
         productManager.addProduct(p2);
-        
         ShoppingCart c1 = new ShoppingCart("C1",productManager);
         c1.addItem(p1);
         c1.addItem(p2);
-        // test count size of the cart
+        // test count size of the cart after having added 2 products
         assertTrue(c1.countItem() == 2);
     }
 
@@ -167,6 +168,7 @@ public class ShoppingCartTest {
     void testGetCartId() {
         ProductsManager productManager = new ProductsManager();
         ShoppingCart c1 = new ShoppingCart("C1",productManager);
+        // check the accuracy of getter and setter function
         assertTrue(c1.getCartId().equals("C1"));
     }
 
@@ -183,6 +185,7 @@ public class ShoppingCartTest {
         c1.addItem(p1);
         c1.addItem(p2);
         c1.addMessage(p1.getName(),1, "Hello");
+         // check the accuracy of getter and setter function
         assertTrue(c1.getMessage(p1.getName(),1).equals("Hello"));
     }
 
@@ -203,7 +206,7 @@ public class ShoppingCartTest {
         c1.addItem(p2);
         Product p = c1.searchItem(p1.getName(),1);
         c1.removeCoupon(p.getName());
-        // find the deleted item
+        // check whether the coupon have been deleted completedly
         assertTrue(c1.searchCoupon(p1.getName()) == null);
     }
 
@@ -218,11 +221,13 @@ public class ShoppingCartTest {
         c1.addItem(p1);
         c1.addItem(p1);
         c1.removeItemAll(p1.getName());
-        // chekc the number of deleted items
+        // check the existence of the deleted product in collection
+        // to examine the accuracy of the alogrithm and show the difference between this and the removebyid function that only 
+        // delete a single item
         assertTrue(p1.getAvailableQuantity() == 4);
-        // find the deleted item
+        // check whether the same name items have been deleted completedly
         assertTrue(c1.getCountItems().get(p1.getName()) == null);
-        // re-check the price
+        // re-check the price of the cart
         assertTrue(c1.cartAmount() == 0.000);
     }
 
@@ -233,19 +238,18 @@ public class ShoppingCartTest {
         ProductsManager productManager = new ProductsManager();
         productManager.addProduct(p1);
         productManager.addProduct(p2);
-        
         ShoppingCart c1 = new ShoppingCart("C1",productManager);
         c1.addItem(p1);
         c1.addItem(p1);
         c1.removeItemById(1);
-        // find the item by id
+        //check whether item exists in the collection after having deleted it with the remove by id fucntion
         Product p = c1.searchItem(p1.getName(),1);
         assertTrue(p == null);
         assertTrue(c1.cartAmount() == 48.000);
     }
 
     @Test
-    void testRemoveItemByIdAndNoProductLeft() {
+    void testRemoveItemByIdAndNoLeftProduct() {
         Product p1 = new PhysicalProducts("car", 40.0, "new", 4, "luxuryTax");
         Coupon cp1 = new Coupon(p1.getName(), "percent", 10);
         p1.setCoupon(cp1);
@@ -259,6 +263,7 @@ public class ShoppingCartTest {
         c1.applyCoupon(cp1.getProduct());
         c1.removeItemById(1);
         c1.removeItemById(2);
+        //check what would happen if we use the item's id many times to remove all items in the collection.
         Product p = c1.searchItem(p1.getName(),1);
         assertTrue(p == null);
         assertTrue(c1.cartAmount() == 0.000);
@@ -279,7 +284,7 @@ public class ShoppingCartTest {
         ShoppingCart c1 = new ShoppingCart("C1",productManager);
         c1.addItem(p1);
         c1.addItem(p2);
-        // find coupon in coupons list
+         // check the equality of copuon inside collection and the added copuon
         assertTrue(c1.searchCoupon(p1.getName()).equals(cp1));
     }
 
@@ -297,8 +302,9 @@ public class ShoppingCartTest {
         ShoppingCart c1 = new ShoppingCart("C1",productManager);
         c1.addItem(p1);
         c1.addItem(p2);
-        // test find an item in cart
+        // check whether the cart contains the product after having added it to the items collection
         assertTrue(c1.getItemsList().containsValue(c1.searchItem(p1.getName(),1)));
+        // check the equality of an item inside collection and the added product
         assertTrue(c1.searchItem(p1.getName(),1).equals(p1));
     }
 
@@ -310,6 +316,7 @@ public class ShoppingCartTest {
         productManager.addProduct(p1);
         productManager.addProduct(p2);
         ShoppingCart c1 = new ShoppingCart("C1",productManager);
+        //check the format of toString function if there is nothing in the carts collection
         assertTrue(c1.toString().equals("Cart C1: There are no products in this cart!"));
     }
     
@@ -324,6 +331,7 @@ public class ShoppingCartTest {
         
         ShoppingCart c1 = new ShoppingCart("C1",productManager);
         c1.addItem(p1);
+        //check the format of toString function
         assertTrue(c1.toString().equals("Cart C1: weight= 10.00, price= 49.00"));
     }
 }

@@ -9,12 +9,14 @@ public class PhysicalProductsTest {
     void testGetDisplayInfo() {
         PhysicalProducts p2 = new PhysicalProducts("car", 40.0, "new", 4, "luxuryTax");
         p2.setWeight(10.00);
+        // the output format of this function 
         assertTrue(p2.getDisplayInfo().equals("car  [type= PHYSICAL, description= new, quantity= 4, price= 40.00, weight= 10.00, message= notSupport!, taxType= luxuryTax, tax= 8.00]"));
     }
 
     @Test
     void testGetProductType() {
         PhysicalProducts p2 = new PhysicalProducts("car", 40.0, "new", 4, "luxuryTax");
+        // the output format of this function 
         assertTrue(p2.getProductType().equals("PHYSICAL"));
     }
 
@@ -22,6 +24,7 @@ public class PhysicalProductsTest {
     void testGetWeight() {
         PhysicalProducts p2 = new PhysicalProducts("car", 40.0, "new", 4, "luxuryTax");
         p2.setWeight(10.00);
+        // check the acuracy of getter setter function.
         assertTrue(p2.getWeight() == 10.000);
     }
 
@@ -30,6 +33,7 @@ public class PhysicalProductsTest {
     void testToString() {
         PhysicalProducts p2 = new PhysicalProducts("car", 40.0, "new", 4, "luxuryTax");
         p2.setWeight(10.00);
+        // the output format of this function 
         assertTrue(p2.toString().equals("PHYSICAL - car"));
     }
 }
